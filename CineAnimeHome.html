@@ -1,0 +1,3899 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Carousel - Recomendações</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6f61 0%, #ff8a65 100%);
+            --text-primary-color: #ffffff;
+            --text-secondary-accent: #cccccc;
+            --background-color: #1c2526;
+            --secondary-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-accent: rgba(0, 0, 0, 0.5);
+            --highlight-accent: #ff3d00;
+            --highlight-hover-accent: #ff5722;
+            --spacing-small: 10px;
+            --spacing-medium: 18px;
+            --spacing-section: 35px;
+            --font-size-extra-small: clamp(9px, 13vw, 13px);
+            --font-size-small: 14px;
+            --font-size-medium: clamp(15px, 2.3vw, 17px);
+            --font-size-large: clamp(18px, 2.8vw, 22px);
+        }
+
+        [data-theme="light"] {
+            --text-primary-color: #212121;
+            --text-secondary-accent: #757575;
+            --background-color: #f5f5f5;
+            --secondary-color: rgba(0, 0, 0, 0.08);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --shadow-primary: rgba(0, 0, 0, 0.15);
+            --shadow-accent: rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Jura', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-primary-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .anime-info-carousel-container {
+            max-width: 100%;
+            width: 100%;
+            margin: var(--spacing-section) 0;
+            padding: 10px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            position: relative;
+            text-align: left;
+        }
+
+        [data-theme="light"] .anime-info-carousel-container {
+            background: #ffffff;
+        }
+
+        .anime-highlight-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            color: var(--text-primary-color);
+            letter-spacing: 0.3px;
+            padding: 7px;
+            transition: color 0.3s ease;
+        }
+
+        .anime-info-slides-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .anime-info-slide {
+            display: none;
+            width: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .anime-info-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .anime-slide-content {
+            padding: 7px 0;
+            color: var(--text-primary-color);
+            text-align: left;
+        }
+
+        .anime-title {
+            font-size: var(--font-size-small);
+            font-weight: 700;
+            margin-bottom: 3px;
+            text-transform: lowercase;
+        }
+
+        .anime-episode {
+            font-size: var(--font-size-extra-small);
+            font-weight: 600;
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .anime-duration {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .anime-synopsis {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-primary-color);
+            line-height: 1.4;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 7px;
+        }
+
+        .anime-actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .anime-action-button {
+            padding: 4px 9px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-extra-small);
+            background: var(--highlight-accent);
+            color: #fff;
+            border-radius: 3px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        .anime-action-button:hover {
+            background: var(--highlight-hover-accent);
+            transform: scale(1.03);
+        }
+
+        .anime-action-button.next-ep {
+            background: #ff9100;
+        }
+
+        .anime-action-button.next-ep:hover {
+            background: #ff8000;
+        }
+
+        .anime-action-button.share {
+            background: #00c853;
+        }
+
+        .anime-action-button.share:hover {
+            background: #00b248;
+        }
+
+        .anime-slideshow-container {
+            max-width: 100%;
+            width: 100%;
+            margin: var(--spacing-section) 0;
+            position: relative;
+            overflow: hidden;
+            padding: 15px 0;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            z-index: 10;
+        }
+
+        [data-theme="light"] .anime-slideshow-container {
+            background: #ffffff;
+        }
+
+        .anime-carousel-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary-color);
+            text-align: center;
+            letter-spacing: 0.3px;
+            padding: 7px;
+            padding-bottom: 10px;
+            transition: background-color 0.7s ease, color 0.7s ease;
+        }
+
+        .anime-slides-wrapper {
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            position: relative;
+            padding: 0;
+            touch-action: pan-x;
+            perspective: 900px;
+            margin-top: 10px;
+        }
+
+        .slide {
+            position: absolute;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            width: calc(100% / 3);
+            height: 142.5px;
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: grab;
+            overflow: hidden;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            will-change: transform, opacity, width, height, box-shadow;
+            z-index: 5;
+        }
+
+        .slide.active {
+            transform: translateX(0) scale(1.2) rotateY(0deg);
+            z-index: 20;
+            opacity: 1;
+            pointer-events: all;
+            width: 100%;
+            height: 213.75px;
+            box-shadow: 0 5px 18px var(--shadow-accent);
+            animation: pulse-shadow 0.5s ease-in-out;
+        }
+
+        .slide.prev {
+            transform: translateX(-100%) scale(0.95) rotateY(-8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            width: calc(100% / 3);
+        }
+
+        .slide.next {
+            transform: translateX(100%) scale(0.95) rotateY(8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            width: calc(100% / 3);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+            loading: lazy;
+            z-index: 6;
+        }
+
+        @keyframes pulse-shadow {
+            0%, 100% { box-shadow: 0 5px 18px var(--shadow-accent); }
+            50% { box-shadow: 0 8px 25px var(--shadow-accent); }
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-primary-color);
+            font-size: var(--font-size-extra-small);
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .swipe-indicator {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-primary-color);
+        }
+
+        .swipe-left {
+            left: 8px;
+        }
+
+        .swipe-right {
+            right: 8px;
+        }
+
+        .anime-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px 25px;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--text-primary-color);
+            box-shadow: 0 3px 10px var(--shadow-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+            font-size: var(--font-size-medium);
+            font-weight: 500;
+            text-align: center;
+            border-radius: 7px;
+            max-width: 85%;
+            width: 350px;
+        }
+
+        [data-theme="light"] .anime-notification {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary-color);
+        }
+
+        .anime-notification.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-section: 20px;
+            }
+
+            body {
+                padding-top: 20px;
+            }
+
+            .anime-carousel-title, .anime-highlight-title {
+                font-size: var(--font-size-medium);
+            }
+
+            .anime-slides-wrapper {
+                height: 270px;
+                gap: 20px;
+                padding: 0;
+            }
+
+            .slide {
+                width: calc(100% / 3);
+                height: 120px;
+            }
+
+            .slide.active {
+                width: 100%;
+                height: 180px;
+            }
+
+            .slide.prev {
+                transform: translateX(-100%) scale(0.95) rotateY(-6deg);
+                width: calc(100% / 3);
+            }
+
+            .slide.next {
+                transform: translateX(100%) scale(0.95) rotateY(6deg);
+                width: calc(100% / 3);
+            }
+
+            .anime-title {
+                font-size: var(--font-size-extra-small);
+            }
+
+            .anime-episode, .anime-duration, .anime-synopsis {
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+            }
+
+            .anime-action-button {
+                padding: 3.5px 7.5px;
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+                min-width: 55px;
+            }
+
+            .anime-notification {
+                font-size: var(--font-size-small);
+                padding: 10px 15px;
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .anime-slides-wrapper {
+                height: 230px;
+            }
+
+            .slide {
+                width: calc(100% / 3);
+                height: 105px;
+            }
+
+            .slide.active {
+                width: 100%;
+                height: 157.5px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="anime-info-carousel-container" id="animeInfoCarousel">
+        <h2 class="anime-highlight-title">Recomendações</h2>
+    </div>
+    <div class="anime-slideshow-container" id="animeSlideshowContainer" aria-live="polite">
+        <div class="carousel-section">
+            <div class="anime-carousel-title" id="animeCarouselTitle"></div>
+            <div class="anime-slides-wrapper" id="animeSlidesWrapper">
+                <div class="swipe-indicator swipe-left">← Deslizar</div>
+                <div class="swipe-indicator swipe-right">Deslizar →</div>
+            </div>
+        </div>
+    </div>
+    <div class="anime-info-carousel-container" id="animeInfoDetailsCarousel">
+        <div class="anime-info-slides-wrapper" id="animeInfoSlidesWrapper"></div>
+    </div>
+    <div class="anime-notification" id="animeNotification"></div>
+    <script>
+        const animeConfig = {
+            series: [
+                {
+                    title: "Naruto Clássico",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto Uzumaki, um jovem ninja que sonha em se tornar Hokage, enfrenta desafios e busca reconhecimento.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/naruto-classico-ep1"
+                },
+                {
+                    title: "Naruto Shippuden",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto retorna à Vila da Folha mais forte e determinado a salvar seu amigo Sasuke e enfrentar a Akatsuki.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/naruto-shippuden-ep1"
+                },
+                {
+                    title: "Dragon Ball Z",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Goku defende a Terra de poderosos inimigos como Freeza, Cell e Majin Boo, enquanto treina para ser o mais forte.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dragon-ball-z-ep1"
+                },
+                {
+                    title: "Attack on Titan",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Humanidade luta pela sobrevivência contra titãs gigantes, enquanto segredos obscuros sobre sua origem são revelados.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/attack-on-titan-ep1"
+                },
+                {
+                    title: "One Piece",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Luffy e sua tripulação viajam pelos mares em busca do lendário One Piece.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/one-piece-ep1"
+                }
+            ],
+            swipeThreshold: 80,
+            autoSlideInterval: 10000
+        };
+
+        const animeElements = {
+            slidesWrapper: document.getElementById('animeSlidesWrapper'),
+            infoSlidesWrapper: document.getElementById('animeInfoSlidesWrapper'),
+            carouselTitle: document.getElementById('animeCarouselTitle'),
+            notification: document.getElementById('animeNotification')
+        };
+
+        const animeState = {
+            currentSlide: 0,
+            isDraggingSlides: false,
+            startX: 0,
+            currentX: 0,
+            lastTouchTime: 0,
+            autoSlideTimer: null
+        };
+
+        function animeInitialize() {
+            try {
+                console.log('Initializing anime carousel');
+                if (!animeElements.slidesWrapper || !animeElements.infoSlidesWrapper || !animeElements.carouselTitle) {
+                    throw new Error('Elementos do carrossel não encontrados no DOM.');
+                }
+                animeCreateCarousels();
+                animeSetupEventListeners();
+                animeUpdateSlides();
+                animeStartAutoSlide();
+                console.log('Anime carousel initialized');
+            } catch (error) {
+                console.error('Anime initialization error:', error);
+                animeShowNotification('Erro ao carregar o carrossel.');
+            }
+        }
+
+        function animeCreateCarousels() {
+            try {
+                animeElements.slidesWrapper.innerHTML = `
+                    <div class="swipe-indicator swipe-left">← Deslizar</div>
+                    <div class="swipe-indicator swipe-right">Deslizar →</div>
+                `;
+                animeElements.infoSlidesWrapper.innerHTML = '';
+                const items = animeConfig.series;
+                if (!items || items.length === 0) {
+                    throw new Error('Nenhum item encontrado em animeConfig.series.');
+                }
+                console.log(`Creating ${items.length} anime slides`);
+                items.forEach((item, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.dataset.index = index;
+                    slide.setAttribute('aria-label', `Slide de ${item.title}: ${item.episode}`);
+                    slide.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/360x270?text=Imagem+Indisponível'">
+                    `;
+                    animeElements.slidesWrapper.appendChild(slide);
+
+                    const nextIndex = (index + 1) % items.length;
+                    const nextEpisodeTitle = items[nextIndex].title;
+                    const infoSlide = document.createElement('div');
+                    infoSlide.className = 'anime-info-slide';
+                    infoSlide.dataset.index = index;
+                    infoSlide.innerHTML = `
+                        <div class="anime-slide-content">
+                            <div class="anime-title">${item.title.toLowerCase()}</div>
+                            <div class="anime-episode">${item.episode}</div>
+                            <div class="anime-duration">${item.duration}</div>
+                            <div class="anime-synopsis">${item.synopsis || 'Sinopse indisponível'}</div>
+                            <div class="anime-actions">
+                                <button class="anime-action-button watch-now" aria-label="Assistir ${item.title} ${item.episode} agora" data-index="${index}">▶ Assistir agora</button>
+                                <button class="anime-action-button next-ep" aria-label="Ir para o próximo anime ${nextEpisodeTitle}" data-index="${nextIndex}">Próximo: ${nextEpisodeTitle.substring(0, 5)}…</button>
+                                <button class="anime-action-button share" aria-label="Compartilhar ${item.title} ${item.episode}" data-index="${index}">📤 Compartilhar</button>
+                            </div>
+                        </div>
+                    `;
+                    animeElements.infoSlidesWrapper.appendChild(infoSlide);
+                });
+
+                animeElements.infoSlidesWrapper.querySelectorAll('.watch-now').forEach(button => {
+                    button.onclick = () => {
+                        animeResetAutoSlide();
+                        animeWatchNow(parseInt(button.dataset.index));
+                    };
+                });
+                animeElements.infoSlidesWrapper.querySelectorAll('.next-ep').forEach(button => {
+                    button.onclick = () => {
+                        animeResetAutoSlide();
+                        animeGoToSlide(parseInt(button.dataset.index));
+                    };
+                });
+                animeElements.infoSlidesWrapper.querySelectorAll('.share').forEach(button => {
+                    button.onclick = () => {
+                        animeResetAutoSlide();
+                        animeShowShareOptions(parseInt(button.dataset.index));
+                    };
+                });
+                console.log('Anime slides created successfully');
+            } catch (error) {
+                console.error('Error creating anime carousels:', error);
+                animeShowNotification('Erro ao criar o carrossel.');
+            }
+        }
+
+        function animeSetupEventListeners() {
+            try {
+                animeElements.slidesWrapper.addEventListener('touchstart', animeTouchStartSlides, { passive: true });
+                animeElements.slidesWrapper.addEventListener('touchmove', animeTouchMoveSlides, { passive: false });
+                animeElements.slidesWrapper.addEventListener('touchend', animeTouchEndSlides, { passive: true });
+                animeElements.slidesWrapper.addEventListener('wheel', animeHandleWheel, { passive: false });
+                document.addEventListener('keydown', animeHandleKeyboardNavigation);
+            } catch (error) {
+                console.error('Error setting up anime event listeners:', error);
+            }
+        }
+
+        function animeHandleKeyboardNavigation(e) {
+            if (e.key === 'ArrowLeft') {
+                animeResetAutoSlide();
+                animePrevSlide();
+            } else if (e.key === 'ArrowRight') {
+                animeResetAutoSlide();
+                animeNextSlide();
+            }
+        }
+
+        function animeHandleWheel(e) {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) return;
+            e.preventDefault();
+            animeResetAutoSlide();
+            if (e.deltaX > 0) animeNextSlide();
+            else animePrevSlide();
+        }
+
+        let animeLastTouchMoveSlides = 0;
+        function animeTouchStartSlides(e) {
+            animeState.isDraggingSlides = true;
+            animeState.startX = e.touches[0].clientX;
+            animeState.lastTouchTime = Date.now();
+            animeUpdateSwipeIndicators();
+        }
+
+        function animeTouchMoveSlides(e) {
+            if (!animeState.isDraggingSlides) return;
+            const now = Date.now();
+            if (now - animeLastTouchMoveSlides < 16) return;
+            animeLastTouchMoveSlides = now;
+            animeState.currentX = e.touches[0].clientX;
+            const deltaX = animeState.startX - animeState.currentX;
+            const deltaY = Math.abs(e.touches[0].clientY - e.touches[0].clientY);
+            if (deltaY > Math.abs(deltaX)) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            const slides = animeElements.slidesWrapper.querySelectorAll('.slide');
+            const maxTranslate = 100;
+            const maxRotateY = 8;
+            slides.forEach((slide, i) => {
+                const isActive = i === animeState.currentSlide;
+                const isPrev = i === (animeState.currentSlide - 1 + slides.length) % slides.length;
+                const isNext = i === (animeState.currentSlide + 1) % slides.length;
+                let translateX = 0;
+                let scale = 0.95;
+                let opacity = 0.5;
+                let rotateY = 0;
+                let shadow = '0 2px 10px var(--shadow-primary)';
+                let animation = '';
+
+                if (isPrev) {
+                    translateX = -maxTranslate + (deltaX / 1.5);
+                    rotateY = -maxRotateY + (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isNext) {
+                    translateX = maxTranslate - (deltaX / 1.5);
+                    rotateY = maxRotateY - (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isActive) {
+                    translateX = deltaX / 5;
+                    opacity = 1;
+                    scale = 1.2;
+                    shadow = '0 5px 18px var(--shadow-accent)';
+                    animation = 'pulse-shadow 0.5s ease-in-out';
+                }
+
+                slide.style.transform = `translateX(${translateX}%) scale(${scale}) rotateY(${rotateY}deg)`;
+                slide.style.opacity = opacity;
+                slide.style.boxShadow = shadow;
+                slide.style.animation = animation;
+            });
+            requestAnimationFrame(animeUpdateSwipeIndicators);
+        }
+
+        function animeTouchEndSlides(e) {
+            if (!animeState.isDraggingSlides) return;
+            const diffX = animeState.startX - animeState.currentX;
+            const timeElapsed = Date.now() - animeState.lastTouchTime;
+            if (Math.abs(diffX) > animeConfig.swipeThreshold && timeElapsed > 100) {
+                animeResetAutoSlide();
+                if (diffX > 0) animeNextSlide();
+                else animePrevSlide();
+            }
+            animeState.isDraggingSlides = false;
+            animeState.startX = 0;
+            animeState.currentX = 0;
+            animeUpdateSlides();
+            animeUpdateSwipeIndicators();
+        }
+
+        function animeUpdateSwipeIndicators() {
+            const indicators = animeElements.slidesWrapper.querySelectorAll('.swipe-indicator');
+            indicators.forEach(indicator => {
+                indicator.style.opacity = animeState.isDraggingSlides ? '1' : '0';
+            });
+        }
+
+        function animeStartAutoSlide() {
+            if (animeState.autoSlideTimer) {
+                clearTimeout(animeState.autoSlideTimer);
+            }
+            animeState.autoSlideTimer = setTimeout(() => {
+                animeNextSlide();
+                animeStartAutoSlide();
+            }, animeConfig.autoSlideInterval);
+        }
+
+        function animeResetAutoSlide() {
+            if (animeState.autoSlideTimer) {
+                clearTimeout(animeState.autoSlideTimer);
+            }
+            animeStartAutoSlide();
+        }
+
+        function animeUpdateSlides() {
+            try {
+                requestAnimationFrame(() => {
+                    const slides = animeElements.slidesWrapper.querySelectorAll('.slide');
+                    const items = animeConfig.series;
+                    if (slides.length === 0 || items.length === 0) {
+                        throw new Error('Slides ou itens não encontrados.');
+                    }
+
+                    animeElements.carouselTitle.textContent = `${items[animeState.currentSlide].title} -- Primeira edição -- ${items[animeState.currentSlide].episode}`;
+                    const targetColor = (animeState.currentSlide % 2 === 0) ? '#1c2526' : '#b0bec5';
+                    animeElements.carouselTitle.style.backgroundColor = targetColor;
+                    animeElements.carouselTitle.style.color = targetColor === '#1c2526' ? '#ffffff' : '#1c2526';
+                    animeElements.carouselTitle.style.fontFamily = "'Jura', sans-serif";
+
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'prev', 'next');
+                        if (i === animeState.currentSlide) {
+                            slide.classList.add('active');
+                            slide.style.transform = 'translateX(0%) scale(1.2) rotateY(0deg)';
+                            slide.style.opacity = '1';
+                            slide.style.width = '100%';
+                            slide.style.height = '213.75px';
+                            slide.style.boxShadow = '0 5px 18px var(--shadow-accent)';
+                            slide.style.animation = 'pulse-shadow 0.5s ease-in-out';
+                        } else if (i === (animeState.currentSlide - 1 + slides.length) % slides.length) {
+                            slide.classList.add('prev');
+                            slide.style.transform = 'translateX(-100%) scale(0.95) rotateY(-8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = 'calc(100% / 3)';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else if (i === (animeState.currentSlide + 1) % slides.length) {
+                            slide.classList.add('next');
+                            slide.style.transform = 'translateX(100%) scale(0.95) rotateY(8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = 'calc(100% / 3)';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else {
+                            slide.style.transform = 'translateX(0%) scale(0.95)';
+                            slide.style.opacity = '0';
+                            slide.style.width = 'calc(100% / 3)';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        }
+                    });
+
+                    animeUpdateInfoSlide(animeState.currentSlide);
+                });
+            } catch (error) {
+                console.error('Error updating anime slides:', error);
+            }
+        }
+
+        function animeUpdateInfoSlide(index) {
+            try {
+                const infoSlides = animeElements.infoSlidesWrapper.querySelectorAll('.anime-info-slide');
+                infoSlides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+            } catch (error) {
+                console.error('Error updating anime info slide:', error);
+            }
+        }
+
+        function animeNextSlide() {
+            animeState.currentSlide = (animeState.currentSlide + 1) % animeConfig.series.length;
+            animeUpdateSlides();
+        }
+
+        function animePrevSlide() {
+            animeState.currentSlide = (animeState.currentSlide - 1 + animeConfig.series.length) % animeConfig.series.length;
+            animeUpdateSlides();
+        }
+
+        function animeGoToSlide(index) {
+            animeState.currentSlide = index;
+            animeUpdateSlides();
+        }
+
+        function animeWatchNow(index) {
+            try {
+                const item = animeConfig.series[index];
+                if (item && item.link) {
+                    animeShowNotification(`Redirecionando para ${item.title} ${item.episode}`);
+                    setTimeout(() => {
+                        window.open(item.link, '_blank');
+                    }, 1500);
+                } else {
+                    animeShowNotification('Link não disponível.');
+                }
+            } catch (error) {
+                console.error('Error in animeWatchNow:', error);
+            }
+        }
+
+        function animeShowShareOptions(index) {
+            try {
+                const item = animeConfig.series[index];
+                const message = encodeURIComponent(`Confira *${item.title} - ${item.episode}*!\nAcesse: ${item.link}`);
+                animeShowNotification('Compartilhando...');
+                setTimeout(() => {
+                    const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+                    window.open(whatsappUrl, '_blank');
+                }, 1500);
+            } catch (error) {
+                console.error('Error in animeShowShareOptions:', error);
+            }
+        }
+
+        function animeShowNotification(message) {
+            try {
+                animeElements.notification.textContent = message;
+                animeElements.notification.classList.add('show');
+                setTimeout(() => {
+                    animeElements.notification.classList.remove('show');
+                }, 3500);
+            } catch (error) {
+                console.error('Error in animeShowNotification:', error);
+            }
+        }
+
+        animeInitialize();
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Carousel - Destaques</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6f61 0%, #ff8a65 100%);
+            --text-primary-color: #ffffff;
+            --text-secondary-accent: #cccccc;
+            --background-color: #1c2526;
+            --secondary-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-accent: rgba(0, 0, 0, 0.5);
+            --highlight-accent: #ff3d00;
+            --highlight-hover-accent: #ff5722;
+            --spacing-small: 10px;
+            --spacing-medium: 18px;
+            --spacing-section: 35px;
+            --font-size-extra-small: clamp(9px, 13vw, 13px);
+            --font-size-small: 14px;
+            --font-size-medium: clamp(15px, 2.3vw, 17px);
+            --font-size-large: clamp(18px, 2.8vw, 22px);
+        }
+
+        [data-theme="light"] {
+            --text-primary-color: #212121;
+            --text-secondary-accent: #757575;
+            --background-color: #f5f5f5;
+            --secondary-color: rgba(0, 0, 0, 0.08);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --shadow-primary: rgba(0, 0, 0, 0.15);
+            --shadow-accent: rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Jura', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-primary-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 55px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 55px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 var(--spacing-medium);
+            z-index: 1000;
+        }
+
+        [data-theme="light"] .header {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .header__theme-toggle {
+            background: #333333;
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-small);
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .header__theme-toggle:hover {
+            background: #444444;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px var(--shadow-primary);
+        }
+
+        [data-theme="light"] .header__theme-toggle {
+            background: #e0e0e0;
+            color: #333333;
+        }
+
+        [data-theme="light"] .header__theme-toggle:hover {
+            background: #d5d5d5;
+        }
+
+        .info-carousel-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 10px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            position: relative;
+            text-align: left;
+        }
+
+        [data-theme="light"] .info-carousel-container {
+            background: #ffffff;
+        }
+
+        .highlight-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            color: var(--text-primary-color);
+            letter-spacing: 0.3px;
+            padding: 7px;
+            transition: color 0.3s ease;
+        }
+
+        .info-slides-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .info-slide {
+            display: none;
+            width: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .info-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .slide-content {
+            padding: 7px 0;
+            color: var(--text-primary-color);
+            text-align: left;
+        }
+
+        .title {
+            font-size: var(--font-size-small);
+            font-weight: 700;
+            margin-bottom: 3px;
+            text-transform: lowercase;
+        }
+
+        .episode {
+            font-size: var(--font-size-extra-small);
+            font-weight: 600;
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .duration {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .synopsis {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-primary-color);
+            line-height: 1.4;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 7px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            padding: 4px 9px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-extra-small);
+            background: var(--highlight-accent);
+            color: #fff;
+            border-radius: 3px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            background: var(--highlight-hover-accent);
+            transform: scale(1.03);
+        }
+
+        .action-button.next-ep {
+            background: #ff9100;
+        }
+
+        .action-button.next-ep:hover {
+            background: #ff8000;
+        }
+
+        .action-button.share {
+            background: #00c853;
+        }
+
+        .action-button.share:hover {
+            background: #00b248;
+        }
+
+        .slideshow-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            z-index: 10;
+        }
+
+        [data-theme="light"] .slideshow-container {
+            background: #ffffff;
+        }
+
+        .carousel-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary-color);
+            text-align: center;
+            letter-spacing: 0.3px;
+            padding: 7px;
+            padding-bottom: 10px;
+            transition: background-color 0.7s ease, color 0.7s ease;
+        }
+
+        .slides-wrapper {
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            position: relative;
+            padding: 0 20px;
+            touch-action: pan-x;
+            perspective: 900px;
+            margin-top: 10px;
+        }
+
+        .slide {
+            position: absolute;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            width: 190px;
+            height: 142.5px;
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: grab;
+            overflow: hidden;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            will-change: transform, opacity, width, height, box-shadow;
+            z-index: 5;
+        }
+
+        .slide.active {
+            transform: translateX(0) scale(1.2) rotateY(0deg);
+            z-index: 20;
+            opacity: 1;
+            pointer-events: all;
+            width: 285px;
+            height: 213.75px;
+            box-shadow: 0 5px 18px var(--shadow-accent);
+            animation: pulse-shadow 0.5s ease-in-out;
+        }
+
+        .slide.prev {
+            transform: translateX(-120%) scale(0.95) rotateY(-8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+        }
+
+        .slide.next {
+            transform: translateX(120%) scale(0.95) rotateY(8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+            loading: lazy;
+            z-index: 6;
+        }
+
+        @keyframes pulse-shadow {
+            0%, 100% { box-shadow: 0 5px 18px var(--shadow-accent); }
+            50% { box-shadow: 0 8px 25px var(--shadow-accent); }
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-primary-color);
+            font-size: var(--font-size-extra-small);
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .swipe-indicator {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-primary-color);
+        }
+
+        .swipe-left {
+            left: 8px;
+        }
+
+        .swipe-right {
+            right: 8px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px 25px;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--text-primary-color);
+            box-shadow: 0 3px 10px var(--shadow-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+            font-size: var(--font-size-medium);
+            font-weight: 500;
+            text-align: center;
+            border-radius: 7px;
+            max-width: 85%;
+            width: 350px;
+        }
+
+        [data-theme="light"] .notification {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary-color);
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-section: 20px;
+            }
+
+            body {
+                padding-top: 50px;
+            }
+
+            .header {
+                height: 50px;
+                padding: 0 var(--spacing-small);
+            }
+
+            .header__theme-toggle {
+                font-size: var(--font-size-extra-small);
+                padding: 5px 9px;
+            }
+
+            .carousel-title, .highlight-title {
+                font-size: var(--font-size-medium);
+            }
+
+            .slides-wrapper {
+                height: 270px;
+                gap: 20px;
+                padding: 0 10px;
+            }
+
+            .slide {
+                width: 160px;
+                height: 120px;
+            }
+
+            .slide.active {
+                width: 240px;
+                height: 180px;
+            }
+
+            .slide.prev {
+                transform: translateX(-100%) scale(0.95) rotateY(-6deg);
+            }
+
+            .slide.next {
+                transform: translateX(100%) scale(0.95) rotateY(6deg);
+            }
+
+            .title {
+                font-size: var(--font-size-extra-small);
+            }
+
+            .episode, .duration, .synopsis {
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+            }
+
+            .action-button {
+                padding: 3.5px 7.5px;
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+                min-width: 55px;
+            }
+
+            .notification {
+                font-size: var(--font-size-small);
+                padding: 10px 15px;
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slides-wrapper {
+                height: 230px;
+            }
+
+            .slide {
+                width: 140px;
+                height: 105px;
+            }
+
+            .slide.active {
+                width: 210px;
+                height: 157.5px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header class="header">
+        <button class="header__theme-toggle" aria-label="Alternar tema">
+            <i class="fas fa-moon"></i> Tema
+        </button>
+    </header>
+    <div class="info-carousel-container" id="infoCarousel">
+        <h2 class="highlight-title">Destaques: Animes Populares</h2>
+    </div>
+    <div class="slideshow-container" id="slideshowContainer" aria-live="polite">
+        <div class="carousel-section">
+            <div class="carousel-title" id="carouselTitle"></div>
+            <div class="slides-wrapper" id="slidesWrapper">
+                <div class="swipe-indicator swipe-left">← Deslizar</div>
+                <div class="swipe-indicator swipe-right">Deslizar →</div>
+            </div>
+        </div>
+    </div>
+    <div class="info-carousel-container" id="infoDetailsCarousel">
+        <div class="info-slides-wrapper" id="infoSlidesWrapper"></div>
+    </div>
+    <div class="notification" id="notification"></div>
+    <script>
+        const config = {
+            series: [
+                {
+                    title: "Naruto Clássico",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto Uzumaki, um jovem ninja que sonha em se tornar Hokage, enfrenta desafios e busca reconhecimento.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/naruto-classico-ep1"
+                },
+                {
+                    title: "Naruto Shippuden",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto retorna à Vila da Folha mais forte e determinado a salvar seu amigo Sasuke e enfrentar a Akatsuki.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/naruto-shippuden-ep1"
+                },
+                {
+                    title: "Dragon Ball Z",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Goku defende a Terra de poderosos inimigos como Freeza, Cell e Majin Boo, enquanto treina para ser o mais forte.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dragon-ball-z-ep1"
+                },
+                {
+                    title: "Attack on Titan",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Humanidade luta pela sobrevivência contra titãs gigantes, enquanto segredos obscuros sobre sua origem são revelados.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/attack-on-titan-ep1"
+                },
+                {
+                    title: "One Piece",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Luffy e sua tripulação viajam pelos mares em busca do lendário One Piece.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/one-piece-ep1"
+                },
+                {
+                    title: "Death Note",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Light Yagami encontra um caderno capaz de matar pessoas ao escrever seus nomes e trava uma guerra psicológica contra L.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/death-note-ep1"
+                },
+                {
+                    title: "Fullmetal Alchemist: Brotherhood",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Dois irmãos alquimistas buscam a Pedra Filosofal para recuperar seus corpos após uma transmutação falha.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/fullmetal-alchemist-brotherhood-ep1"
+                },
+                {
+                    title: "Bleach",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Ichigo Kurosaki ganha poderes de Shinigami e protege os vivos dos espíritos malignos conhecidos como Hollows.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/bleach-ep1"
+                },
+                {
+                    title: "Tokyo Ghoul",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Kaneki Ken se torna meio-ghoul após um acidente e precisa se adaptar ao mundo cruel das criaturas que caçam humanos.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/tokyo-ghoul-ep1"
+                },
+                {
+                    title: "Sword Art Online",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Jogadores ficam presos dentro de um jogo de realidade virtual mortal onde morrer no jogo significa morrer na vida real.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/sword-art-online-ep1"
+                },
+                {
+                    title: "My Hero Academia",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Izuku Midoriya, um garoto sem poderes, ganha a chance de se tornar herói após conhecer All Might.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/my-hero-academia-ep1"
+                },
+                {
+                    title: "Demon Slayer",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Tanjiro Kamado se torna caçador de demônios para salvar sua irmã Nezuko, que virou um demônio.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/demon-slayer-ep1"
+                },
+                {
+                    title: "Jujutsu Kaisen",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Yuji Itadori engole um dedo amaldiçoado e passa a lutar contra maldições como hospedeiro de Sukuna.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/jujutsu-kaisen-ep1"
+                },
+                {
+                    title: "Hunter x Hunter",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Gon Freecss embarca em uma jornada para encontrar seu pai e se tornar um Hunter.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/hunter-x-hunter-ep1"
+                },
+                {
+                    title: "Fairy Tail",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Natsu, Lucy e seus amigos da guilda Fairy Tail enfrentam inimigos poderosos em aventuras mágicas.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/fairy-tail-ep1"
+                },
+                {
+                    title: "One Punch Man",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Saitama derrota qualquer inimigo com um único soco e busca um adversário à altura.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/one-punch-man-ep1"
+                },
+                {
+                    title: "Black Clover",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Asta, um garoto sem magia em um mundo mágico, busca se tornar o Rei Mago.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/black-clover-ep1"
+                },
+                {
+                    title: "Tokyo Revengers",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Takemichi viaja ao passado para salvar sua ex-namorada e mudar o futuro de uma gangue juvenil.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/tokyo-revengers-ep1"
+                },
+                {
+                    title: "Haikyuu!!",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Hinata Shoyo e sua equipe do Karasuno lutam para voltar ao topo do vôlei escolar.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/haikyuu-ep1"
+                },
+                {
+                    title: "Blue Exorcist",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Rin Okumura descobre ser filho de Satanás e decide lutar contra as forças do mal.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/blue-exorcist-ep1"
+                },
+                {
+                    title: "Chainsaw Man",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Denji, um caçador de demônios, ganha o poder de se transformar em uma motosserra humana.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/chainsaw-man-ep1"
+                },
+                {
+                    title: "Mob Psycho 100",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Shigeo 'Mob' Kageyama é um jovem com poderes psíquicos que tenta levar uma vida normal.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/mob-psycho-100-ep1"
+                },
+                {
+                    title: "Parasyte: The Maxim",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Shinichi Izumi luta contra parasitas alienígenas que controlam corpos humanos.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/parasyte-ep1"
+                },
+                {
+                    title: "Dr. Stone",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Senku tenta reconstruir a civilização usando ciência após a humanidade virar pedra por milênios.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dr-stone-ep1"
+                },
+                {
+                    title: "The Seven Deadly Sins",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Os Sete Pecados Capitais lutam para salvar o reino de Liones de ameaças demoníacas.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/seven-deadly-sins-ep1"
+                },
+                {
+                    title: "Gintama",
+                    episode: "Ep. 1",
+                    duration: "25 minutos",
+                    synopsis: "Gintoki, um samurai preguiçoso, aceita todo tipo de trabalho estranho para sobreviver em um Japão dominado por aliens.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/gintama-ep1"
+                },
+                {
+                    title: "Re:Zero",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Subaru é transportado para um mundo de fantasia e descobre que volta no tempo sempre que morre.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/re-zero-ep1"
+                },
+                {
+                    title: "Erased",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Satoru viaja ao passado para evitar o assassinato de sua mãe e de uma colega de escola.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/erased-ep1"
+                },
+                {
+                    title: "Steins;Gate",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Um grupo de amigos descobre como enviar mensagens ao passado e se envolvem em uma conspiração de viagens no tempo.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/steins-gate-ep1"
+                },
+                {
+                    title: "Cowboy Bebop",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Caçadores de recompensas vagam pelo espaço em missões perigosas ao som de jazz e blues.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/cowboy-bebop-ep1"
+                }
+            ],
+            swipeThreshold: 80
+        };
+
+        const elements = {
+            slidesWrapper: document.getElementById('slidesWrapper'),
+            infoSlidesWrapper: document.getElementById('infoSlidesWrapper'),
+            carouselTitle: document.getElementById('carouselTitle'),
+            notification: document.getElementById('notification'),
+            themeToggle: document.querySelector('.header__theme-toggle')
+        };
+
+        const state = {
+            currentSlide: 0,
+            isDraggingSlides: false,
+            startX: 0,
+            currentX: 0,
+            lastTouchTime: 0
+        };
+
+        function initialize() {
+            try {
+                console.log('Initializing carousel');
+                createCarousels();
+                setupEventListeners();
+                updateSlides();
+                console.log('Carousel initialized');
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showNotification('Erro ao carregar o carrossel.');
+            }
+        }
+
+        function createCarousels() {
+            try {
+                elements.slidesWrapper.innerHTML = `
+                    <div class="swipe-indicator swipe-left">← Deslizar</div>
+                    <div class="swipe-indicator swipe-right">Deslizar →</div>
+                `;
+                elements.infoSlidesWrapper.innerHTML = '';
+                const items = config.series;
+                console.log(`Creating ${items.length} slides`);
+                items.forEach((item, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.dataset.index = index;
+                    slide.setAttribute('aria-label', `Slide de ${item.title}: ${item.episode}`);
+                    slide.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/360x270?text=Imagem+Indisponível'">
+                    `;
+                    elements.slidesWrapper.appendChild(slide);
+
+                    const nextIndex = (index + 1) % items.length;
+                    const nextEpisodeTitle = items[nextIndex].title;
+                    const infoSlide = document.createElement('div');
+                    infoSlide.className = 'info-slide';
+                    infoSlide.dataset.index = index;
+                    infoSlide.innerHTML = `
+                        <div class="slide-content">
+                            <div class="title">${item.title.toLowerCase()}</div>
+                            <div class="episode">${item.episode}</div>
+                            <div class="duration">${item.duration}</div>
+                            <div class="synopsis">${item.synopsis || 'Sinopse indisponível'}</div>
+                            <div class="actions">
+                                <button class="action-button watch-now" aria-label="Assistir ${item.title} ${item.episode} agora" data-index="${index}">▶ Assistir agora</button>
+                                <button class="action-button next-ep" aria-label="Ir para o próximo anime ${nextEpisodeTitle}" data-index="${nextIndex}">Próximo: ${nextEpisodeTitle.substring(0, 5)}…</button>
+                                <button class="action-button share" aria-label="Compartilhar ${item.title} ${item.episode}" data-index="${index}">📤 Compartilhar</button>
+                            </div>
+                        </div>
+                    `;
+                    elements.infoSlidesWrapper.appendChild(infoSlide);
+                });
+
+                elements.infoSlidesWrapper.querySelectorAll('.watch-now').forEach(button => {
+                    button.onclick = () => watchNow(parseInt(button.dataset.index));
+                });
+                elements.infoSlidesWrapper.querySelectorAll('.next-ep').forEach(button => {
+                    button.onclick = () => goToSlide(parseInt(button.dataset.index));
+                });
+                elements.infoSlidesWrapper.querySelectorAll('.share').forEach(button => {
+                    button.onclick = () => showShareOptions(parseInt(button.dataset.index));
+                });
+                console.log('Slides created successfully');
+            } catch (error) {
+                console.error('Error creating carousels:', error);
+                showNotification('Erro ao criar o carrossel.');
+            }
+        }
+
+        function setupEventListeners() {
+            try {
+                elements.slidesWrapper.addEventListener('touchstart', touchStartSlides, { passive: true });
+                elements.slidesWrapper.addEventListener('touchmove', touchMoveSlides, { passive: false });
+                elements.slidesWrapper.addEventListener('touchend', touchEndSlides, { passive: true });
+                elements.slidesWrapper.addEventListener('wheel', handleWheel, { passive: false });
+                document.addEventListener('keydown', handleKeyboardNavigation);
+                elements.themeToggle.addEventListener('click', toggleTheme);
+            } catch (error) {
+                console.error('Error setting up event listeners:', error);
+            }
+        }
+
+        function handleKeyboardNavigation(e) {
+            if (e.key === 'ArrowLeft') prevSlide();
+            else if (e.key === 'ArrowRight') nextSlide();
+        }
+
+        function handleWheel(e) {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) return;
+            e.preventDefault();
+            if (e.deltaX > 0) nextSlide();
+            else prevSlide();
+        }
+
+        let lastTouchMoveSlides = 0;
+        function touchStartSlides(e) {
+            state.isDraggingSlides = true;
+            state.startX = e.touches[0].clientX;
+            state.lastTouchTime = Date.now();
+            updateSwipeIndicators();
+        }
+
+        function touchMoveSlides(e) {
+            if (!state.isDraggingSlides) return;
+            const now = Date.now();
+            if (now - lastTouchMoveSlides < 16) return;
+            lastTouchMoveSlides = now;
+            state.currentX = e.touches[0].clientX;
+            const deltaX = state.startX - state.currentX;
+            const deltaY = Math.abs(e.touches[0].clientY - e.touches[0].clientY);
+            if (deltaY > Math.abs(deltaX)) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            const slides = elements.slidesWrapper.querySelectorAll('.slide');
+            const maxTranslate = 120;
+            const maxRotateY = 8;
+            slides.forEach((slide, i) => {
+                const isActive = i === state.currentSlide;
+                const isPrev = i === (state.currentSlide - 1 + slides.length) % slides.length;
+                const isNext = i === (state.currentSlide + 1) % slides.length;
+                let translateX = 0;
+                let scale = 0.95;
+                let opacity = 0.5;
+                let rotateY = 0;
+                let shadow = '0 2px 10px var(--shadow-primary)';
+                let animation = '';
+
+                if (isPrev) {
+                    translateX = -maxTranslate + (deltaX / 1.5);
+                    rotateY = -maxRotateY + (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isNext) {
+                    translateX = maxTranslate - (deltaX / 1.5);
+                    rotateY = maxRotateY - (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isActive) {
+                    translateX = deltaX / 5;
+                    opacity = 1;
+                    scale = 1.2;
+                    shadow = '0 5px 18px var(--shadow-accent)';
+                    animation = 'pulse-shadow 0.5s ease-in-out';
+                }
+
+                slide.style.transform = `translateX(${translateX}%) scale(${scale}) rotateY(${rotateY}deg)`;
+                slide.style.opacity = opacity;
+                slide.style.boxShadow = shadow;
+                slide.style.animation = animation;
+            });
+            requestAnimationFrame(updateSwipeIndicators);
+        }
+
+        function touchEndSlides(e) {
+            if (!state.isDraggingSlides) return;
+            const diffX = state.startX - state.currentX;
+            const timeElapsed = Date.now() - state.lastTouchTime;
+            if (Math.abs(diffX) > config.swipeThreshold && timeElapsed > 100) {
+                if (diffX > 0) nextSlide();
+                else prevSlide();
+            }
+            state.isDraggingSlides = false;
+            state.startX = 0;
+            state.currentX = 0;
+            updateSlides();
+            updateSwipeIndicators();
+        }
+
+        function updateSwipeIndicators() {
+            const indicators = elements.slidesWrapper.querySelectorAll('.swipe-indicator');
+            indicators.forEach(indicator => {
+                indicator.style.opacity = state.isDraggingSlides ? '1' : '0';
+            });
+        }
+
+        function updateSlides() {
+            try {
+                requestAnimationFrame(() => {
+                    const slides = elements.slidesWrapper.querySelectorAll('.slide');
+                    const items = config.series;
+
+                    elements.carouselTitle.textContent = `${items[state.currentSlide].title} -- Primeira Temporada -- ${items[state.currentSlide].episode}`;
+                    const targetColor = (state.currentSlide % 2 === 0) ? '#1c2526' : '#b0bec5';
+                    elements.carouselTitle.style.backgroundColor = targetColor;
+                    elements.carouselTitle.style.color = targetColor === '#1c2526' ? '#ffffff' : '#1c2526';
+                    elements.carouselTitle.style.fontFamily = "'Jura', sans-serif";
+
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'prev', 'next');
+                        if (i === state.currentSlide) {
+                            slide.classList.add('active');
+                            slide.style.transform = 'translateX(0%) scale(1.2) rotateY(0deg)';
+                            slide.style.opacity = '1';
+                            slide.style.width = '285px';
+                            slide.style.height = '213.75px';
+                            slide.style.boxShadow = '0 5px 18px var(--shadow-accent)';
+                            slide.style.animation = 'pulse-shadow 0.5s ease-in-out';
+                        } else if (i === (state.currentSlide - 1 + slides.length) % slides.length) {
+                            slide.classList.add('prev');
+                            slide.style.transform = 'translateX(-120%) scale(0.95) rotateY(-8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else if (i === (state.currentSlide + 1) % slides.length) {
+                            slide.classList.add('next');
+                            slide.style.transform = 'translateX(120%) scale(0.95) rotateY(8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else {
+                            slide.style.transform = 'translateX(0%) scale(0.95)';
+                            slide.style.opacity = '0';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        }
+                    });
+
+                    updateInfoSlide(state.currentSlide);
+                });
+            } catch (error) {
+                console.error('Error updating slides:', error);
+            }
+        }
+
+        function updateInfoSlide(index) {
+            try {
+                const infoSlides = elements.infoSlidesWrapper.querySelectorAll('.info-slide');
+                infoSlides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+            } catch (error) {
+                console.error('Error updating info slide:', error);
+            }
+        }
+
+        function nextSlide() {
+            state.currentSlide = (state.currentSlide + 1) % config.series.length;
+            updateSlides();
+        }
+
+        function prevSlide() {
+            state.currentSlide = (state.currentSlide - 1 + config.series.length) % config.series.length;
+            updateSlides();
+        }
+
+        function goToSlide(index) {
+            state.currentSlide = index;
+            updateSlides();
+        }
+
+        function watchNow(index) {
+            try {
+                const item = config.series[index];
+                if (item && item.link) {
+                    showNotification(`Redirecionando para ${item.title} ${item.episode}...`);
+                    setTimeout(() => {
+                        window.open(item.link, '_blank');
+                    }, 1500);
+                } else {
+                    showNotification('Link não disponível.');
+                }
+            } catch (error) {
+                console.error('Error in watchNow:', error);
+            }
+        }
+
+        function showShareOptions(index) {
+            try {
+                const item = config.series[index];
+                const message = encodeURIComponent(`Confira *${item.title} - ${item.episode}*!\nAcesse: ${item.link}`);
+                showNotification('Compartilhando...');
+                setTimeout(() => {
+                    const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+                    window.open(whatsappUrl, '_blank');
+                }, 1500);
+            } catch (error) {
+                console.error('Error in showShareOptions:', error);
+            }
+        }
+
+        function showNotification(message) {
+            try {
+                elements.notification.textContent = message;
+                elements.notification.classList.add('show');
+                setTimeout(() => {
+                    elements.notification.classList.remove('show');
+                }, 3500);
+            } catch (error) {
+                console.error('Error in showNotification:', error);
+            }
+        }
+
+        function toggleTheme() {
+            try {
+                const currentTheme = document.body.dataset.theme;
+                document.body.dataset.theme = currentTheme === 'light' ? 'dark' : 'light';
+                elements.themeToggle.innerHTML = `<i class="fas ${document.body.dataset.theme === 'light' ? 'fa-sun' : 'fa-moon'}"></i> Tema`;
+            } catch (error) {
+                console.error('Error in toggleTheme:', error);
+            }
+        }
+
+        initialize();
+    </script>
+</body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Carousel - Mais Assistidos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6f61 0%, #ff8a65 100%);
+            --text-primary-color: #ffffff;
+            --text-secondary-accent: #cccccc;
+            --background-color: #1c2526;
+            --secondary-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-accent: rgba(0, 0, 0, 0.5);
+            --highlight-accent: #ff3d00;
+            --highlight-hover-accent: #ff5722;
+            --spacing-small: 10px;
+            --spacing-medium: 18px;
+            --spacing-section: 35px;
+            --font-size-extra-small: clamp(9px, 13vw, 13px);
+            --font-size-small: 14px;
+            --font-size-medium: clamp(15px, 2.3vw, 17px);
+            --font-size-large: clamp(18px, 2.8vw, 22px);
+        }
+
+        [data-theme="light"] {
+            --text-primary-color: #212121;
+            --text-secondary-accent: #757575;
+            --background-color: #f5f5f5;
+            --secondary-color: rgba(0, 0, 0, 0.08);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --shadow-primary: rgba(0, 0, 0, 0.15);
+            --shadow-accent: rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Jura', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-primary-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .top-info-carousel-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 10px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            position: relative;
+            text-align: left;
+        }
+
+        [data-theme="light"] .top-info-carousel-container {
+            background: #ffffff;
+        }
+
+        .top-highlight-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            color: var(--text-primary-color);
+            letter-spacing: 0.3px;
+            padding: 7px;
+            transition: color 0.3s ease;
+        }
+
+        .top-info-slides-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .top-info-slide {
+            display: none;
+            width: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .top-info-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .top-slide-content {
+            padding: 7px 0;
+            color: var(--text-primary-color);
+            text-align: left;
+        }
+
+        .top-title {
+            font-size: var(--font-size-small);
+            font-weight: 700;
+            margin-bottom: 3px;
+            text-transform: lowercase;
+        }
+
+        .top-episode {
+            font-size: var(--font-size-extra-small);
+            font-weight: 600;
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .top-duration {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .top-synopsis {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-primary-color);
+            line-height: 1.4;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 7px;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .top-action-button {
+            padding: 4px 9px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-extra-small);
+            background: var(--highlight-accent);
+            color: #fff;
+            border-radius: 3px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        .top-action-button:hover {
+            background: var(--highlight-hover-accent);
+            transform: scale(1.03);
+        }
+
+        .top-action-button.next-ep {
+            background: #ff9100;
+        }
+
+        .top-action-button.next-ep:hover {
+            background: #ff8000;
+        }
+
+        .top-action-button.share {
+            background: #00c853;
+        }
+
+        .top-action-button.share:hover {
+            background: #00b248;
+        }
+
+        .top-slideshow-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            z-index: 10;
+        }
+
+        [data-theme="light"] .top-slideshow-container {
+            background: #ffffff;
+        }
+
+        .top-carousel-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary-color);
+            text-align: center;
+            letter-spacing: 0.3px;
+            padding: 7px;
+            padding-bottom: 10px;
+            transition: background-color 0.7s ease, color 0.7s ease;
+        }
+
+        .top-slides-wrapper {
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            position: relative;
+            padding: 0 20px;
+            touch-action: pan-x;
+            perspective: 900px;
+            margin-top: 10px;
+        }
+
+        .slide {
+            position: absolute;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            width: 190px;
+            height: 142.5px;
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: grab;
+            overflow: hidden;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            will-change: transform, opacity, width, height, box-shadow;
+            z-index: 5;
+        }
+
+        .slide.active {
+            transform: translateX(0) scale(1.2) rotateY(0deg);
+            z-index: 20;
+            opacity: 1;
+            pointer-events: all;
+            width: 285px;
+            height: 213.75px;
+            box-shadow: 0 5px 18px var(--shadow-accent);
+            animation: pulse-shadow 0.5s ease-in-out;
+        }
+
+        .slide.prev {
+            transform: translateX(-120%) scale(0.95) rotateY(-8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+        }
+
+        .slide.next {
+            transform: translateX(120%) scale(0.95) rotateY(8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+            loading: lazy;
+            z-index: 6;
+        }
+
+        @keyframes pulse-shadow {
+            0%, 100% { box-shadow: 0 5px 18px var(--shadow-accent); }
+            50% { box-shadow: 0 8px 25px var(--shadow-accent); }
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-primary-color);
+            font-size: var(--font-size-extra-small);
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .swipe-indicator {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-primary-color);
+        }
+
+        .swipe-left {
+            left: 8px;
+        }
+
+        .swipe-right {
+            right: 8px;
+        }
+
+        .top-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px 25px;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--text-primary-color);
+            box-shadow: 0 3px 10px var(--shadow-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+            font-size: var(--font-size-medium);
+            font-weight: 500;
+            text-align: center;
+            border-radius: 7px;
+            max-width: 85%;
+            width: 350px;
+        }
+
+        [data-theme="light"] .top-notification {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary-color);
+        }
+
+        .top-notification.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-section: 20px;
+            }
+
+            body {
+                padding-top: 20px;
+            }
+
+            .top-carousel-title, .top-highlight-title {
+                font-size: var(--font-size-medium);
+            }
+
+            .top-slides-wrapper {
+                height: 270px;
+                gap: 20px;
+                padding: 0 10px;
+            }
+
+            .slide {
+                width: 160px;
+                height: 120px;
+            }
+
+            .slide.active {
+                width: 240px;
+                height: 180px;
+            }
+
+            .slide.prev {
+                transform: translateX(-100%) scale(0.95) rotateY(-6deg);
+            }
+
+            .slide.next {
+                transform: translateX(100%) scale(0.95) rotateY(6deg);
+            }
+
+            .top-title {
+                font-size: var(--font-size-extra-small);
+            }
+
+            .top-episode, .top-duration, .top-synopsis {
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+            }
+
+            .top-action-button {
+                padding: 3.5px 7.5px;
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+                min-width: 55px;
+            }
+
+            .top-notification {
+                font-size: var(--font-size-small);
+                padding: 10px 15px;
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-slides-wrapper {
+                height: 230px;
+            }
+
+            .slide {
+                width: 140px;
+                height: 105px;
+            }
+
+            .slide.active {
+                width: 210px;
+                height: 157.5px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="top-info-carousel-container" id="topInfoCarousel">
+        <h2 class="top-highlight-title">Mais Assistidos</h2>
+    </div>
+    <div class="top-slideshow-container" id="topSlideshowContainer" aria-live="polite">
+        <div class="carousel-section">
+            <div class="top-carousel-title" id="topCarouselTitle"></div>
+            <div class="top-slides-wrapper" id="topSlidesWrapper">
+                <div class="swipe-indicator swipe-left">← Deslizar</div>
+                <div class="swipe-indicator swipe-right">Deslizar →</div>
+            </div>
+        </div>
+    </div>
+    <div class="top-info-carousel-container" id="topInfoDetailsCarousel">
+        <div class="top-info-slides-wrapper" id="topInfoSlidesWrapper"></div>
+    </div>
+    <div class="top-notification" id="topNotification"></div>
+    <script>
+        const topConfig = {
+            series: [
+                {
+                    title: "Naruto Clássico",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto Uzumaki, um jovem ninja que sonha em se tornar Hokage, enfrenta desafios e busca reconhecimento.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/naruto-classico-ep1"
+                },
+                {
+                    title: "Naruto Shippuden",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto retorna à Vila da Folha mais forte e determinado a salvar seu amigo Sasuke e enfrentar a Akatsuki.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/naruto-shippuden-ep1"
+                },
+                {
+                    title: "Dragon Ball Z",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Goku defende a Terra de poderosos inimigos como Freeza, Cell e Majin Boo, enquanto treina para ser o mais forte.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dragon-ball-z-ep1"
+                },
+                {
+                    title: "Attack on Titan",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Humanidade luta pela sobrevivência contra titãs gigantes, enquanto segredos obscuros sobre sua origem são revelados.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/attack-on-titan-ep1"
+                },
+                {
+                    title: "One Piece",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Luffy e sua tripulação viajam pelos mares em busca do lendário One Piece.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/one-piece-ep1"
+                },
+                {
+                    title: "Death Note",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Light Yagami encontra um caderno capaz de matar pessoas ao escrever seus nomes e trava uma guerra psicológica contra L.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/death-note-ep1"
+                },
+                {
+                    title: "Fullmetal Alchemist: Brotherhood",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Dois irmãos alquimistas buscam a Pedra Filosofal para recuperar seus corpos após uma transmutação falha.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/fullmetal-alchemist-brotherhood-ep1"
+                },
+                {
+                    title: "Bleach",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Ichigo Kurosaki ganha poderes de Shinigami e protege os vivos dos espíritos malignos conhecidos como Hollows.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/bleach-ep1"
+                },
+                {
+                    title: "Tokyo Ghoul",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Kaneki Ken se torna meio-ghoul após um acidente e precisa se adaptar ao mundo cruel das criaturas que caçam humanos.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/tokyo-ghoul-ep1"
+                },
+                {
+                    title: "Sword Art Online",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Jogadores ficam presos dentro de um jogo de realidade virtual mortal onde morrer no jogo significa morrer na vida real.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/sword-art-online-ep1"
+                },
+                {
+                    title: "My Hero Academia",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Izuku Midoriya, um garoto sem poderes, ganha a chance de se tornar herói após conhecer All Might.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/my-hero-academia-ep1"
+                },
+                {
+                    title: "Demon Slayer",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Tanjiro Kamado se torna caçador de demônios para salvar sua irmã Nezuko, que virou um demônio.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/demon-slayer-ep1"
+                },
+                {
+                    title: "Jujutsu Kaisen",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Yuji Itadori engole um dedo amaldiçoado e passa a lutar contra maldições como hospedeiro de Sukuna.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/jujutsu-kaisen-ep1"
+                },
+                {
+                    title: "Hunter x Hunter",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Gon Freecss embarca em uma jornada para encontrar seu pai e se tornar um Hunter.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/hunter-x-hunter-ep1"
+                },
+                {
+                    title: "Fairy Tail",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Natsu, Lucy e seus amigos da guilda Fairy Tail enfrentam inimigos poderosos em aventuras mágicas.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/fairy-tail-ep1"
+                },
+                {
+                    title: "One Punch Man",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Saitama derrota qualquer inimigo com um único soco e busca um adversário à altura.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/one-punch-man-ep1"
+                },
+                {
+                    title: "Black Clover",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Asta, um garoto sem magia em um mundo mágico, busca se tornar o Rei Mago.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/black-clover-ep1"
+                },
+                {
+                    title: "Tokyo Revengers",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Takemichi viaja ao passado para salvar sua ex-namorada e mudar o futuro de uma gangue juvenil.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/tokyo-revengers-ep1"
+                },
+                {
+                    title: "Haikyuu!!",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Hinata Shoyo e sua equipe do Karasuno lutam para voltar ao topo do vôlei escolar.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/haikyuu-ep1"
+                },
+                {
+                    title: "Blue Exorcist",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Rin Okumura descobre ser filho de Satanás e decide lutar contra as forças do mal.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/blue-exorcist-ep1"
+                },
+                {
+                    title: "Chainsaw Man",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Denji, um caçador de demônios, ganha o poder de se transformar em uma motosserra humana.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/chainsaw-man-ep1"
+                },
+                {
+                    title: "Mob Psycho 100",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Shigeo 'Mob' Kageyama é um jovem com poderes psíquicos que tenta levar uma vida normal.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/mob-psycho-100-ep1"
+                },
+                {
+                    title: "Parasyte: The Maxim",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Shinichi Izumi luta contra parasitas alienígenas que controlam corpos humanos.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/parasyte-ep1"
+                },
+                {
+                    title: "Dr. Stone",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Senku tenta reconstruir a civilização usando ciência após a humanidade virar pedra por milênios.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dr-stone-ep1"
+                },
+                {
+                    title: "The Seven Deadly Sins",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Os Sete Pecados Capitais lutam para salvar o reino de Liones de ameaças demoníacas.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/seven-deadly-sins-ep1"
+                },
+                {
+                    title: "Gintama",
+                    episode: "Ep. 1",
+                    duration: "25 minutos",
+                    synopsis: "Gintoki, um samurai preguiçoso, aceita todo tipo de trabalho estranho para sobreviver em um Japão dominado por aliens.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/gintama-ep1"
+                },
+                {
+                    title: "Re:Zero",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Subaru é transportado para um mundo de fantasia e descobre que volta no tempo sempre que morre.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/re-zero-ep1"
+                },
+                {
+                    title: "Erased",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Satoru viaja ao passado para evitar o assassinato de sua mãe e de uma colega de escola.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/erased-ep1"
+                },
+                {
+                    title: "Steins;Gate",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Um grupo de amigos descobre como enviar mensagens ao passado e se envolvem em uma conspiração de viagens no tempo.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/steins-gate-ep1"
+                },
+                {
+                    title: "Cowboy Bebop",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Caçadores de recompensas vagam pelo espaço em missões perigosas ao som de jazz e blues.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/cowboy-bebop-ep1"
+                }
+            ],
+            swipeThreshold: 80
+        };
+
+        const topElements = {
+            slidesWrapper: document.getElementById('topSlidesWrapper'),
+            infoSlidesWrapper: document.getElementById('topInfoSlidesWrapper'),
+            carouselTitle: document.getElementById('topCarouselTitle'),
+            notification: document.getElementById('topNotification')
+        };
+
+        const topState = {
+            currentSlide: 0,
+            isDraggingSlides: false,
+            startX: 0,
+            currentX: 0,
+            lastTouchTime: 0
+        };
+
+        function topInitialize() {
+            try {
+                console.log('Initializing top carousel');
+                topCreateCarousels();
+                topSetupEventListeners();
+                topUpdateSlides();
+                console.log('Top carousel initialized');
+            } catch (error) {
+                console.error('Top initialization error:', error);
+                topShowNotification('Erro ao carregar o carrossel.');
+            }
+        }
+
+        function topCreateCarousels() {
+            try {
+                topElements.slidesWrapper.innerHTML = `
+                    <div class="swipe-indicator swipe-left">← Deslizar</div>
+                    <div class="swipe-indicator swipe-right">Deslizar →</div>
+                `;
+                topElements.infoSlidesWrapper.innerHTML = '';
+                const items = topConfig.series;
+                console.log(`Creating ${items.length} top slides`);
+                items.forEach((item, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.dataset.index = index;
+                    slide.setAttribute('aria-label', `Slide de ${item.title}: ${item.episode}`);
+                    slide.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/360x270?text=Imagem+Indisponível'">
+                    `;
+                    topElements.slidesWrapper.appendChild(slide);
+
+                    const nextIndex = (index + 1) % items.length;
+                    const nextEpisodeTitle = items[nextIndex].title;
+                    const infoSlide = document.createElement('div');
+                    infoSlide.className = 'top-info-slide';
+                    infoSlide.dataset.index = index;
+                    infoSlide.innerHTML = `
+                        <div class="top-slide-content">
+                            <div class="top-title">${item.title.toLowerCase()}</div>
+                            <div class="top-episode">${item.episode}</div>
+                            <div class="top-duration">${item.duration}</div>
+                            <div class="top-synopsis">${item.synopsis || 'Sinopse indisponível'}</div>
+                            <div class="top-actions">
+                                <button class="top-action-button watch-now" aria-label="Assistir ${item.title} ${item.episode} agora" data-index="${index}">▶ Assistir agora</button>
+                                <button class="top-action-button next-ep" aria-label="Ir para o próximo anime ${nextEpisodeTitle}" data-index="${nextIndex}">Próximo: ${nextEpisodeTitle.substring(0, 5)}…</button>
+                                <button class="top-action-button share" aria-label="Compartilhar ${item.title} ${item.episode}" data-index="${index}">📤 Compartilhar</button>
+                            </div>
+                        </div>
+                    `;
+                    topElements.infoSlidesWrapper.appendChild(infoSlide);
+                });
+
+                topElements.infoSlidesWrapper.querySelectorAll('.watch-now').forEach(button => {
+                    button.onclick = () => topWatchNow(parseInt(button.dataset.index));
+                });
+                topElements.infoSlidesWrapper.querySelectorAll('.next-ep').forEach(button => {
+                    button.onclick = () => topGoToSlide(parseInt(button.dataset.index));
+                });
+                topElements.infoSlidesWrapper.querySelectorAll('.share').forEach(button => {
+                    button.onclick = () => topShowShareOptions(parseInt(button.dataset.index));
+                });
+                console.log('Top slides created successfully');
+            } catch (error) {
+                console.error('Error creating top carousels:', error);
+                topShowNotification('Erro ao criar o carrossel.');
+            }
+        }
+
+        function topSetupEventListeners() {
+            try {
+                topElements.slidesWrapper.addEventListener('touchstart', topTouchStartSlides, { passive: true });
+                topElements.slidesWrapper.addEventListener('touchmove', topTouchMoveSlides, { passive: false });
+                topElements.slidesWrapper.addEventListener('touchend', topTouchEndSlides, { passive: true });
+                topElements.slidesWrapper.addEventListener('wheel', topHandleWheel, { passive: false });
+                document.addEventListener('keydown', topHandleKeyboardNavigation);
+            } catch (error) {
+                console.error('Error setting up top event listeners:', error);
+            }
+        }
+
+        function topHandleKeyboardNavigation(e) {
+            if (e.key === 'ArrowLeft') topPrevSlide();
+            else if (e.key === 'ArrowRight') topNextSlide();
+        }
+
+        function topHandleWheel(e) {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) return;
+            e.preventDefault();
+            if (e.deltaX > 0) topNextSlide();
+            else topPrevSlide();
+        }
+
+        let topLastTouchMoveSlides = 0;
+        function topTouchStartSlides(e) {
+            topState.isDraggingSlides = true;
+            topState.startX = e.touches[0].clientX;
+            topState.lastTouchTime = Date.now();
+            topUpdateSwipeIndicators();
+        }
+
+        function topTouchMoveSlides(e) {
+            if (!topState.isDraggingSlides) return;
+            const now = Date.now();
+            if (now - topLastTouchMoveSlides < 16) return;
+            topLastTouchMoveSlides = now;
+            topState.currentX = e.touches[0].clientX;
+            const deltaX = topState.startX - topState.currentX;
+            const deltaY = Math.abs(e.touches[0].clientY - e.touches[0].clientY);
+            if (deltaY > Math.abs(deltaX)) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            const slides = topElements.slidesWrapper.querySelectorAll('.slide');
+            const maxTranslate = 120;
+            const maxRotateY = 8;
+            slides.forEach((slide, i) => {
+                const isActive = i === topState.currentSlide;
+                const isPrev = i === (topState.currentSlide - 1 + slides.length) % slides.length;
+                const isNext = i === (topState.currentSlide + 1) % slides.length;
+                let translateX = 0;
+                let scale = 0.95;
+                let opacity = 0.5;
+                let rotateY = 0;
+                let shadow = '0 2px 10px var(--shadow-primary)';
+                let animation = '';
+
+                if (isPrev) {
+                    translateX = -maxTranslate + (deltaX / 1.5);
+                    rotateY = -maxRotateY + (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isNext) {
+                    translateX = maxTranslate - (deltaX / 1.5);
+                    rotateY = maxRotateY - (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isActive) {
+                    translateX = deltaX / 5;
+                    opacity = 1;
+                    scale = 1.2;
+                    shadow = '0 5px 18px var(--shadow-accent)';
+                    animation = 'pulse-shadow 0.5s ease-in-out';
+                }
+
+                slide.style.transform = `translateX(${translateX}%) scale(${scale}) rotateY(${rotateY}deg)`;
+                slide.style.opacity = opacity;
+                slide.style.boxShadow = shadow;
+                slide.style.animation = animation;
+            });
+            requestAnimationFrame(topUpdateSwipeIndicators);
+        }
+
+        function topTouchEndSlides(e) {
+            if (!topState.isDraggingSlides) return;
+            const diffX = topState.startX - topState.currentX;
+            const timeElapsed = Date.now() - topState.lastTouchTime;
+            if (Math.abs(diffX) > topConfig.swipeThreshold && timeElapsed > 100) {
+                if (diffX > 0) topNextSlide();
+                else topPrevSlide();
+            }
+            topState.isDraggingSlides = false;
+            topState.startX = 0;
+            topState.currentX = 0;
+            topUpdateSlides();
+            topUpdateSwipeIndicators();
+        }
+
+        function topUpdateSwipeIndicators() {
+            const indicators = topElements.slidesWrapper.querySelectorAll('.swipe-indicator');
+            indicators.forEach(indicator => {
+                indicator.style.opacity = topState.isDraggingSlides ? '1' : '0';
+            });
+        }
+
+        function topUpdateSlides() {
+            try {
+                requestAnimationFrame(() => {
+                    const slides = topElements.slidesWrapper.querySelectorAll('.slide');
+                    const items = topConfig.series;
+
+                    topElements.carouselTitle.textContent = `${items[topState.currentSlide].title} -- Primeira Temporada -- ${items[topState.currentSlide].episode}`;
+                    const targetColor = (topState.currentSlide % 2 === 0) ? '#1c2526' : '#b0bec5';
+                    topElements.carouselTitle.style.backgroundColor = targetColor;
+                    topElements.carouselTitle.style.color = targetColor === '#1c2526' ? '#ffffff' : '#1c2526';
+                    topElements.carouselTitle.style.fontFamily = "'Jura', sans-serif";
+
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'prev', 'next');
+                        if (i === topState.currentSlide) {
+                            slide.classList.add('active');
+                            slide.style.transform = 'translateX(0%) scale(1.2) rotateY(0deg)';
+                            slide.style.opacity = '1';
+                            slide.style.width = '285px';
+                            slide.style.height = '213.75px';
+                            slide.style.boxShadow = '0 5px 18px var(--shadow-accent)';
+                            slide.style.animation = 'pulse-shadow 0.5s ease-in-out';
+                        } else if (i === (topState.currentSlide - 1 + slides.length) % slides.length) {
+                            slide.classList.add('prev');
+                            slide.style.transform = 'translateX(-120%) scale(0.95) rotateY(-8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else if (i === (topState.currentSlide + 1) % slides.length) {
+                            slide.classList.add('next');
+                            slide.style.transform = 'translateX(120%) scale(0.95) rotateY(8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else {
+                            slide.style.transform = 'translateX(0%) scale(0.95)';
+                            slide.style.opacity = '0';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        }
+                    });
+
+                    topUpdateInfoSlide(topState.currentSlide);
+                });
+            } catch (error) {
+                console.error('Error updating top slides:', error);
+            }
+        }
+
+        function topUpdateInfoSlide(index) {
+            try {
+                const infoSlides = topElements.infoSlidesWrapper.querySelectorAll('.top-info-slide');
+                infoSlides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+            } catch (error) {
+                console.error('Error updating top info slide:', error);
+            }
+        }
+
+        function topNextSlide() {
+            topState.currentSlide = (topState.currentSlide + 1) % topConfig.series.length;
+            topUpdateSlides();
+        }
+
+        function topPrevSlide() {
+            topState.currentSlide = (topState.currentSlide - 1 + topConfig.series.length) % topConfig.series.length;
+            topUpdateSlides();
+        }
+
+        function topGoToSlide(index) {
+            topState.currentSlide = index;
+            topUpdateSlides();
+        }
+
+        function topWatchNow(index) {
+            try {
+                const item = topConfig.series[index];
+                if (item && item.link) {
+                    topShowNotification(`Redirecionando para ${item.title} ${item.episode}...`);
+                    setTimeout(() => {
+                        window.open(item.link, '_blank');
+                    }, 1500);
+                } else {
+                    topShowNotification('Link não disponível.');
+                }
+            } catch (error) {
+                console.error('Error in topWatchNow:', error);
+            }
+        }
+
+        function topShowShareOptions(index) {
+            try {
+                const item = topConfig.series[index];
+                const message = encodeURIComponent(`Confira *${item.title} - ${item.episode}*!\nAcesse: ${item.link}`);
+                topShowNotification('Compartilhando...');
+                setTimeout(() => {
+                    const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+                    window.open(whatsappUrl, '_blank');
+                }, 1500);
+            } catch (error) {
+                console.error('Error in topShowShareOptions:', error);
+            }
+        }
+
+        function topShowNotification(message) {
+            try {
+                topElements.notification.textContent = message;
+                topElements.notification.classList.add('show');
+                setTimeout(() => {
+                    topElements.notification.classList.remove('show');
+                }, 3500);
+            } catch (error) {
+                console.error('Error in topShowNotification:', error);
+            }
+        }
+
+        topInitialize();
+    </script>
+</body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Carousel - Adicionados Recentemente</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6f61 0%, #ff8a65 100%);
+            --text-primary-color: #ffffff;
+            --text-secondary-accent: #cccccc;
+            --background-color: #1c2526;
+            --secondary-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-accent: rgba(0, 0, 0, 0.5);
+            --highlight-accent: #ff3d00;
+            --highlight-hover-accent: #ff5722;
+            --spacing-small: 10px;
+            --spacing-medium: 18px;
+            --spacing-section: 35px;
+            --font-size-extra-small: clamp(9px, 13vw, 13px);
+            --font-size-small: 14px;
+            --font-size-medium: clamp(15px, 2.3vw, 17px);
+            --font-size-large: clamp(18px, 2.8vw, 22px);
+        }
+
+        [data-theme="light"] {
+            --text-primary-color: #212121;
+            --text-secondary-accent: #757575;
+            --background-color: #f5f5f5;
+            --secondary-color: rgba(0, 0, 0, 0.08);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --shadow-primary: rgba(0, 0, 0, 0.15);
+            --shadow-accent: rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Jura', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-primary-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .recent-info-carousel-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 10px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            position: relative;
+            text-align: left;
+        }
+
+        [data-theme="light"] .recent-info-carousel-container {
+            background: #ffffff;
+        }
+
+        .recent-highlight-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            color: var(--text-primary-color);
+            letter-spacing: 0.3px;
+            padding: 7px;
+            transition: color 0.3s ease;
+        }
+
+        .recent-info-slides-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .recent-info-slide {
+            display: none;
+            width: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .recent-info-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .recent-slide-content {
+            padding: 7px 0;
+            color: var(--text-primary-color);
+            text-align: left;
+        }
+
+        .recent-title {
+            font-size: var(--font-size-small);
+            font-weight: 700;
+            margin-bottom: 3px;
+            text-transform: lowercase;
+        }
+
+        .recent-episode {
+            font-size: var(--font-size-extra-small);
+            font-weight: 600;
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .recent-duration {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .recent-synopsis {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-primary-color);
+            line-height: 1.4;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 7px;
+        }
+
+        .recent-actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .recent-action-button {
+            padding: 4px 9px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-extra-small);
+            background: var(--highlight-accent);
+            color: #fff;
+            border-radius: 3px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        .recent-action-button:hover {
+            background: var(--highlight-hover-accent);
+            transform: scale(1.03);
+        }
+
+        .recent-action-button.next-ep {
+            background: #ff9100;
+        }
+
+        .recent-action-button.next-ep:hover {
+            background: #ff8000;
+        }
+
+        .recent-action-button.share {
+            background: #00c853;
+        }
+
+        .recent-action-button.share:hover {
+            background: #00b248;
+        }
+
+        .recent-slideshow-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            position: relative;
+            overflow: hidden;
+            padding: 15px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            z-index: 10;
+        }
+
+        [data-theme="light"] .recent-slideshow-container {
+            background: #ffffff;
+        }
+
+        .recent-carousel-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary-color);
+            text-align: center;
+            letter-spacing: 0.3px;
+            padding: 7px;
+            padding-bottom: 10px;
+            transition: background-color 0.7s ease, color 0.7s ease;
+        }
+
+        .recent-slides-wrapper {
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            position: relative;
+            padding: 0 20px;
+            touch-action: pan-x;
+            perspective: 900px;
+            margin-top: 10px;
+        }
+
+        .slide {
+            position: absolute;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            width: 190px;
+            height: 142.5px;
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: grab;
+            overflow: hidden;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            will-change: transform, opacity, width, height, box-shadow;
+            z-index: 5;
+        }
+
+        .slide.active {
+            transform: translateX(0) scale(1.2) rotateY(0deg);
+            z-index: 20;
+            opacity: 1;
+            pointer-events: all;
+            width: 285px;
+            height: 213.75px;
+            box-shadow: 0 5px 18px var(--shadow-accent);
+            animation: pulse-shadow 0.5s ease-in-out;
+        }
+
+        .slide.prev {
+            transform: translateX(-120%) scale(0.95) rotateY(-8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+        }
+
+        .slide.next {
+            transform: translateX(120%) scale(0.95) rotateY(8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+            loading: lazy;
+            z-index: 6;
+        }
+
+        @keyframes pulse-shadow {
+            0%, 100% { box-shadow: 0 5px 18px var(--shadow-accent); }
+            50% { box-shadow: 0 8px 25px var(--shadow-accent); }
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-primary-color);
+            font-size: var(--font-size-extra-small);
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .swipe-indicator {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-primary-color);
+        }
+
+        .swipe-left {
+            left: 8px;
+        }
+
+        .swipe-right {
+            right: 8px;
+        }
+
+        .recent-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px 25px;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--text-primary-color);
+            box-shadow: 0 3px 10px var(--shadow-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+            font-size: var(--font-size-medium);
+            font-weight: 500;
+            text-align: center;
+            border-radius: 7px;
+            max-width: 85%;
+            width: 350px;
+        }
+
+        [data-theme="light"] .recent-notification {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary-color);
+        }
+
+        .recent-notification.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-section: 20px;
+            }
+
+            body {
+                padding-top: 20px;
+            }
+
+            .recent-carousel-title, .recent-highlight-title {
+                font-size: var(--font-size-medium);
+            }
+
+            .recent-slides-wrapper {
+                height: 270px;
+                gap: 20px;
+                padding: 0 10px;
+            }
+
+            .slide {
+                width: 160px;
+                height: 120px;
+            }
+
+            .slide.active {
+                width: 240px;
+                height: 180px;
+            }
+
+            .slide.prev {
+                transform: translateX(-100%) scale(0.95) rotateY(-6deg);
+            }
+
+            .slide.next {
+                transform: translateX(100%) scale(0.95) rotateY(6deg);
+            }
+
+            .recent-title {
+                font-size: var(--font-size-extra-small);
+            }
+
+            .recent-episode, .recent-duration, .recent-synopsis {
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+            }
+
+            .recent-action-button {
+                padding: 3.5px 7.5px;
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+                min-width: 55px;
+            }
+
+            .recent-notification {
+                font-size: var(--font-size-small);
+                padding: 10px 15px;
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .recent-slides-wrapper {
+                height: 230px;
+            }
+
+            .slide {
+                width: 140px;
+                height: 105px;
+            }
+
+            .slide.active {
+                width: 210px;
+                height: 157.5px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="recent-info-carousel-container" id="recentInfoCarousel">
+        <h2 class="recent-highlight-title">Adicionados Recentemente</h2>
+    </div>
+    <div class="recent-slideshow-container" id="recentSlideshowContainer" aria-live="polite">
+        <div class="carousel-section">
+            <div class="recent-carousel-title" id="recentCarouselTitle"></div>
+            <div class="recent-slides-wrapper" id="recentSlidesWrapper">
+                <div class="swipe-indicator swipe-left">← Deslizar</div>
+                <div class="swipe-indicator swipe-right">Deslizar →</div>
+            </div>
+        </div>
+    </div>
+    <div class="recent-info-carousel-container" id="recentInfoDetailsCarousel">
+        <div class="recent-info-slides-wrapper" id="recentInfoSlidesWrapper"></div>
+    </div>
+    <div class="recent-notification" id="recentNotification"></div>
+    <script>
+        const recentConfig = {
+            series: [
+                {
+                    title: "Naruto Clássico",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto Uzumaki, um jovem ninja que sonha em se tornar Hokage, enfrenta desafios e busca reconhecimento.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/naruto-classico-ep1"
+                },
+                {
+                    title: "Naruto Shippuden",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto retorna à Vila da Folha mais forte e determinado a salvar seu amigo Sasuke e enfrentar a Akatsuki.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/naruto-shippuden-ep1"
+                },
+                {
+                    title: "Dragon Ball Z",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Goku defende a Terra de poderosos inimigos como Freeza, Cell e Majin Boo, enquanto treina para ser o mais forte.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dragon-ball-z-ep1"
+                },
+                {
+                    title: "Attack on Titan",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Humanidade luta pela sobrevivência contra titãs gigantes, enquanto segredos obscuros sobre sua origem são revelados.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/attack-on-titan-ep1"
+                },
+                {
+                    title: "One Piece",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Luffy e sua tripulação viajam pelos mares em busca do lendário One Piece.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/one-piece-ep1"
+                },
+                {
+                    title: "Death Note",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Light Yagami encontra um caderno capaz de matar pessoas ao escrever seus nomes e trava uma guerra psicológica contra L.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/death-note-ep1"
+                },
+                {
+                    title: "Fullmetal Alchemist: Brotherhood",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Dois irmãos alquimistas buscam a Pedra Filosofal para recuperar seus corpos após uma transmutação falha.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/fullmetal-alchemist-brotherhood-ep1"
+                },
+                {
+                    title: "Bleach",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Ichigo Kurosaki ganha poderes de Shinigami e protege os vivos dos espíritos malignos conhecidos como Hollows.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/bleach-ep1"
+                },
+                {
+                    title: "Tokyo Ghoul",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Kaneki Ken se torna meio-ghoul após um acidente e precisa se adaptar ao mundo cruel das criaturas que caçam humanos.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/tokyo-ghoul-ep1"
+                },
+                {
+                    title: "Sword Art Online",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Jogadores ficam presos dentro de um jogo de realidade virtual mortal onde morrer no jogo significa morrer na vida real.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/sword-art-online-ep1"
+                },
+                {
+                    title: "My Hero Academia",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Izuku Midoriya, um garoto sem poderes, ganha a chance de se tornar herói após conhecer All Might.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/my-hero-academia-ep1"
+                },
+                {
+                    title: "Demon Slayer",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Tanjiro Kamado se torna caçador de demônios para salvar sua irmã Nezuko, que virou um demônio.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/demon-slayer-ep1"
+                },
+                {
+                    title: "Jujutsu Kaisen",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Yuji Itadori engole um dedo amaldiçoado e passa a lutar contra maldições como hospedeiro de Sukuna.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/jujutsu-kaisen-ep1"
+                },
+                {
+                    title: "Hunter x Hunter",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Gon Freecss embarca em uma jornada para encontrar seu pai e se tornar um Hunter.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/hunter-x-hunter-ep1"
+                },
+                {
+                    title: "Fairy Tail",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Natsu, Lucy e seus amigos da guilda Fairy Tail enfrentam inimigos poderosos em aventuras mágicas.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/fairy-tail-ep1"
+                },
+                {
+                    title: "One Punch Man",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Saitama derrota qualquer inimigo com um único soco e busca um adversário à altura.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/one-punch-man-ep1"
+                },
+                {
+                    title: "Black Clover",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Asta, um garoto sem magia em um mundo mágico, busca se tornar o Rei Mago.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/black-clover-ep1"
+                },
+                {
+                    title: "Tokyo Revengers",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Takemichi viaja ao passado para salvar sua ex-namorada e mudar o futuro de uma gangue juvenil.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/tokyo-revengers-ep1"
+                },
+                {
+                    title: "Haikyuu!!",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Hinata Shoyo e sua equipe do Karasuno lutam para voltar ao topo do vôlei escolar.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/haikyuu-ep1"
+                },
+                {
+                    title: "Blue Exorcist",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Rin Okumura descobre ser filho de Satanás e decide lutar contra as forças do mal.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/blue-exorcist-ep1"
+                },
+                {
+                    title: "Chainsaw Man",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Denji, um caçador de demônios, ganha o poder de se transformar em uma motosserra humana.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/chainsaw-man-ep1"
+                },
+                {
+                    title: "Mob Psycho 100",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Shigeo 'Mob' Kageyama é um jovem com poderes psíquicos que tenta levar uma vida normal.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/mob-psycho-100-ep1"
+                },
+                {
+                    title: "Parasyte: The Maxim",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Shinichi Izumi luta contra parasitas alienígenas que controlam corpos humanos.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/parasyte-ep1"
+                },
+                {
+                    title: "Dr. Stone",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Senku tenta reconstruir a civilização usando ciência após a humanidade virar pedra por milênios.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dr-stone-ep1"
+                },
+                {
+                    title: "The Seven Deadly Sins",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Os Sete Pecados Capitais lutam para salvar o reino de Liones de ameaças demoníacas.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/seven-deadly-sins-ep1"
+                },
+                {
+                    title: "Gintama",
+                    episode: "Ep. 1",
+                    duration: "25 minutos",
+                    synopsis: "Gintoki, um samurai preguiçoso, aceita todo tipo de trabalho estranho para sobreviver em um Japão dominado por aliens.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/gintama-ep1"
+                },
+                {
+                    title: "Re:Zero",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Subaru é transportado para um mundo de fantasia e descobre que volta no tempo sempre que morre.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/re-zero-ep1"
+                },
+                {
+                    title: "Erased",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Satoru viaja ao passado para evitar o assassinato de sua mãe e de uma colega de escola.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/erased-ep1"
+                },
+                {
+                    title: "Steins;Gate",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Um grupo de amigos descobre como enviar mensagens ao passado e se envolvem em uma conspiração de viagens no tempo.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/steins-gate-ep1"
+                },
+                {
+                    title: "Cowboy Bebop",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Caçadores de recompensas vagam pelo espaço em missões perigosas ao som de jazz e blues.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/cowboy-bebop-ep1"
+                }
+            ],
+            swipeThreshold: 80
+        };
+
+        const recentElements = {
+            slidesWrapper: document.getElementById('recentSlidesWrapper'),
+            infoSlidesWrapper: document.getElementById('recentInfoSlidesWrapper'),
+            carouselTitle: document.getElementById('recentCarouselTitle'),
+            notification: document.getElementById('recentNotification')
+        };
+
+        const recentState = {
+            currentSlide: 0,
+            isDraggingSlides: false,
+            startX: 0,
+            currentX: 0,
+            lastTouchTime: 0
+        };
+
+        function recentInitialize() {
+            try {
+                console.log('Initializing recent carousel');
+                recentCreateCarousels();
+                recentSetupEventListeners();
+                recentUpdateSlides();
+                console.log('Recent carousel initialized');
+            } catch (error) {
+                console.error('Recent initialization error:', error);
+                recentShowNotification('Erro ao carregar o carrossel.');
+            }
+        }
+
+        function recentCreateCarousels() {
+            try {
+                recentElements.slidesWrapper.innerHTML = `
+                    <div class="swipe-indicator swipe-left">← Deslizar</div>
+                    <div class="swipe-indicator swipe-right">Deslizar →</div>
+                `;
+                recentElements.infoSlidesWrapper.innerHTML = '';
+                const items = recentConfig.series;
+                console.log(`Creating ${items.length} recent slides`);
+                items.forEach((item, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.dataset.index = index;
+                    slide.setAttribute('aria-label', `Slide de ${item.title}: ${item.episode}`);
+                    slide.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/360x270?text=Imagem+Indisponível'">
+                    `;
+                    recentElements.slidesWrapper.appendChild(slide);
+
+                    const nextIndex = (index + 1) % items.length;
+                    const nextEpisodeTitle = items[nextIndex].title;
+                    const infoSlide = document.createElement('div');
+                    infoSlide.className = 'recent-info-slide';
+                    infoSlide.dataset.index = index;
+                    infoSlide.innerHTML = `
+                        <div class="recent-slide-content">
+                            <div class="recent-title">${item.title.toLowerCase()}</div>
+                            <div class="recent-episode">${item.episode}</div>
+                            <div class="recent-duration">${item.duration}</div>
+                            <div class="recent-synopsis">${item.synopsis || 'Sinopse indisponível'}</div>
+                            <div class="recent-actions">
+                                <button class="recent-action-button watch-now" aria-label="Assistir ${item.title} ${item.episode} agora" data-index="${index}">▶ Assistir agora</button>
+                                <button class="recent-action-button next-ep" aria-label="Ir para o próximo anime ${nextEpisodeTitle}" data-index="${nextIndex}">Próximo: ${nextEpisodeTitle.substring(0, 5)}…</button>
+                                <button class="recent-action-button share" aria-label="Compartilhar ${item.title} ${item.episode}" data-index="${index}">📤 Compartilhar</button>
+                            </div>
+                        </div>
+                    `;
+                    recentElements.infoSlidesWrapper.appendChild(infoSlide);
+                });
+
+                recentElements.infoSlidesWrapper.querySelectorAll('.watch-now').forEach(button => {
+                    button.onclick = () => recentWatchNow(parseInt(button.dataset.index));
+                });
+                recentElements.infoSlidesWrapper.querySelectorAll('.next-ep').forEach(button => {
+                    button.onclick = () => recentGoToSlide(parseInt(button.dataset.index));
+                });
+                recentElements.infoSlidesWrapper.querySelectorAll('.share').forEach(button => {
+                    button.onclick = () => recentShowShareOptions(parseInt(button.dataset.index));
+                });
+                console.log('Recent slides created successfully');
+            } catch (error) {
+                console.error('Error creating recent carousels:', error);
+                recentShowNotification('Erro ao criar o carrossel.');
+            }
+        }
+
+        function recentSetupEventListeners() {
+            try {
+                recentElements.slidesWrapper.addEventListener('touchstart', recentTouchStartSlides, { passive: true });
+                recentElements.slidesWrapper.addEventListener('touchmove', recentTouchMoveSlides, { passive: false });
+                recentElements.slidesWrapper.addEventListener('touchend', recentTouchEndSlides, { passive: true });
+                recentElements.slidesWrapper.addEventListener('wheel', recentHandleWheel, { passive: false });
+                document.addEventListener('keydown', recentHandleKeyboardNavigation);
+            } catch (error) {
+                console.error('Error setting up recent event listeners:', error);
+            }
+        }
+
+        function recentHandleKeyboardNavigation(e) {
+            if (e.key === 'ArrowLeft') recentPrevSlide();
+            else if (e.key === 'ArrowRight') recentNextSlide();
+        }
+
+        function recentHandleWheel(e) {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) return;
+            e.preventDefault();
+            if (e.deltaX > 0) recentNextSlide();
+            else recentPrevSlide();
+        }
+
+        let recentLastTouchMoveSlides = 0;
+        function recentTouchStartSlides(e) {
+            recentState.isDraggingSlides = true;
+            recentState.startX = e.touches[0].clientX;
+            recentState.lastTouchTime = Date.now();
+            recentUpdateSwipeIndicators();
+        }
+
+        function recentTouchMoveSlides(e) {
+            if (!recentState.isDraggingSlides) return;
+            const now = Date.now();
+            if (now - recentLastTouchMoveSlides < 16) return;
+            recentLastTouchMoveSlides = now;
+            recentState.currentX = e.touches[0].clientX;
+            const deltaX = recentState.startX - recentState.currentX;
+            const deltaY = Math.abs(e.touches[0].clientY - e.touches[0].clientY);
+            if (deltaY > Math.abs(deltaX)) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            const slides = recentElements.slidesWrapper.querySelectorAll('.slide');
+            const maxTranslate = 120;
+            const maxRotateY = 8;
+            slides.forEach((slide, i) => {
+                const isActive = i === recentState.currentSlide;
+                const isPrev = i === (recentState.currentSlide - 1 + slides.length) % slides.length;
+                const isNext = i === (recentState.currentSlide + 1) % slides.length;
+                let translateX = 0;
+                let scale = 0.95;
+                let opacity = 0.5;
+                let rotateY = 0;
+                let shadow = '0 2px 10px var(--shadow-primary)';
+                let animation = '';
+
+                if (isPrev) {
+                    translateX = -maxTranslate + (deltaX / 1.5);
+                    rotateY = -maxRotateY + (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isNext) {
+                    translateX = maxTranslate - (deltaX / 1.5);
+                    rotateY = maxRotateY - (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isActive) {
+                    translateX = deltaX / 5;
+                    opacity = 1;
+                    scale = 1.2;
+                    shadow = '0 5px 18px var(--shadow-accent)';
+                    animation = 'pulse-shadow 0.5s ease-in-out';
+                }
+
+                slide.style.transform = `translateX(${translateX}%) scale(${scale}) rotateY(${rotateY}deg)`;
+                slide.style.opacity = opacity;
+                slide.style.boxShadow = shadow;
+                slide.style.animation = animation;
+            });
+            requestAnimationFrame(recentUpdateSwipeIndicators);
+        }
+
+        function recentTouchEndSlides(e) {
+            if (!recentState.isDraggingSlides) return;
+            const diffX = recentState.startX - recentState.currentX;
+            const timeElapsed = Date.now() - recentState.lastTouchTime;
+            if (Math.abs(diffX) > recentConfig.swipeThreshold && timeElapsed > 100) {
+                if (diffX > 0) recentNextSlide();
+                else recentPrevSlide();
+            }
+            recentState.isDraggingSlides = false;
+            recentState.startX = 0;
+            recentState.currentX = 0;
+            recentUpdateSlides();
+            recentUpdateSwipeIndicators();
+        }
+
+        function recentUpdateSwipeIndicators() {
+            const indicators = recentElements.slidesWrapper.querySelectorAll('.swipe-indicator');
+            indicators.forEach(indicator => {
+                indicator.style.opacity = recentState.isDraggingSlides ? '1' : '0';
+            });
+        }
+
+        function recentUpdateSlides() {
+            try {
+                requestAnimationFrame(() => {
+                    const slides = recentElements.slidesWrapper.querySelectorAll('.slide');
+                    const items = recentConfig.series;
+
+                    recentElements.carouselTitle.textContent = `${items[recentState.currentSlide].title} -- Primeira edição -- ${items[recentState.currentSlide].episode}`;
+                    const targetColor = (recentState.currentSlide % 2 === 0) ? '#1c2526' : '#b0bec5';
+                    recentElements.carouselTitle.style.backgroundColor = targetColor;
+                    recentElements.carouselTitle.style.color = targetColor === '#1c2526' ? '#ffffff' : '#1c2526';
+                    recentElements.carouselTitle.style.fontFamily = "'Jura', sans-serif";
+
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'prev', 'next');
+                        if (i === recentState.currentSlide) {
+                            slide.classList.add('active');
+                            slide.style.transform = 'translateX(0%) scale(1.2) rotateY(0deg)';
+                            slide.style.opacity = '1';
+                            slide.style.width = '285px';
+                            slide.style.height = '213.75px';
+                            slide.style.boxShadow = '0 5px 18px var(--shadow-accent)';
+                            slide.style.animation = 'pulse-shadow 0.5s ease-in-out';
+                        } else if (i === (recentState.currentSlide - 1 + slides.length) % slides.length) {
+                            slide.classList.add('prev');
+                            slide.style.transform = 'translateX(-120%) scale(0.95) rotateY(-8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else if (i === (recentState.currentSlide + 1) % slides.length) {
+                            slide.classList.add('next');
+                            slide.style.transform = 'translateX(120%) scale(0.95) rotateY(8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else {
+                            slide.style.transform = 'translateX(0%) scale(0.95)';
+                            slide.style.opacity = '0';
+                            slide.style.width = '190px';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        }
+                    });
+
+                    recentUpdateInfoSlide(recentState.currentSlide);
+                });
+            } catch (error) {
+                console.error('Error updating recent slides:', error);
+            }
+        }
+
+        function recentUpdateInfoSlide(index) {
+            try {
+                const infoSlides = recentElements.infoSlidesWrapper.querySelectorAll('.recent-info-slide');
+                infoSlides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+            } catch (error) {
+                console.error('Error updating recent info slide:', error);
+            }
+        }
+
+        function recentNextSlide() {
+            recentState.currentSlide = (recentState.currentSlide + 1) % recentConfig.series.length;
+            recentUpdateSlides();
+        }
+
+        function recentPrevSlide() {
+            recentState.currentSlide = (recentState.currentSlide - 1 + recentConfig.series.length) % recentConfig.series.length;
+            recentUpdateSlides();
+        }
+
+        function recentGoToSlide(index) {
+            recentState.currentSlide = index;
+            recentUpdateSlides();
+        }
+
+        function recentWatchNow(index) {
+            try {
+                const item = recentConfig.series[index];
+                if (item && item.link) {
+                    recentShowNotification(`Redirecionando para ${item.title} ${recentState.currentSlide}`);
+                    setTimeout(() => {
+                        window.open(item.link, '_blank');
+                    }, 1500);
+                } else {
+                    recentShowNotification('Link não disponível.');
+                }
+            } catch (error) {
+                console.error('Error in recentWatchNow:', error);
+            }
+        }
+
+        function recentShowShareOptions(index) {
+            try {
+                const item = recentConfig.series[index];
+                const message = encodeURIComponent(`Confira *${item.title} - ${item.episode}*!\nAcesse: ${item.link}`);
+                recentShowNotification('Compartilhando...');
+                setTimeout(() => {
+                    const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+                    window.open(whatsappUrl, '_blank');
+                }, 1500);
+            } catch (error) {
+                console.error('Error in recentShowShareOptions:', error);
+            }
+        }
+
+        function recentShowNotification(message) {
+            try {
+                recentElements.notification.textContent = message;
+                recentElements.notification.classList.add('show');
+                setTimeout(() => {
+                    recentElements.notification.classList.remove('show');
+                }, 3500);
+            } catch (error) {
+                console.error('Error in recentShowNotification:', error);
+            }
+        }
+
+        recentInitialize();
+    </script>
+</body>
