@@ -1,6 +1,6 @@
 {
-  "name": "CineAnime",
-  "short_name": "CineAnime",
+  "name": "CineAnime1.0",
+  "short_name": "CineAnime1.0",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
