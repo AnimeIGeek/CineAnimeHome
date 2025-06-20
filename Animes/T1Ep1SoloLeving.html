@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280, initial-scale=0.3, maximum-scale=0.3, user-scalable=no">
+  <title>Solo Leveling - Frame Exclusivo</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --text-primary: #f9fafb;
+      --text-secondary: #b8c0d0;
+      --background: #070b17;
+      --surface: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow-color: rgba(0, 0, 0, 0.6);
+      --highlight-color: #e50914;
+      --spacing-sm: 12px;
+      --spacing-md: 20px;
+      --spacing-section: 40px;
+      --font-size-sm: 0.9rem;
+      --font-size-md: 1.1rem;
+      --font-size-lg: 1.5rem;
+    }
+
+    [data-theme="light"] {
+      --text-primary: #1f2937;
+      --text-secondary: #4b5563;
+      --background: #f3f4f6;
+      --surface: rgba(0, 0, 0, 0.05);
+      --border: rgba(0, 0, 0, 0.1);
+      --shadow-color: rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Jura', sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 60px;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(18, 21, 32, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 var(--spacing-md);
+      z-index: 1001;
+      box-shadow: 0 2px 5px var(--shadow-color);
+    }
+
+    [data-theme="light"] .header {
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .header__title {
+      font-family: 'Ubuntu', sans-serif;
+      font-weight: 700;
+      font-size: var(--font-size-lg);
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .header__nav {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .header__theme-toggle {
+      font-family: 'Ubuntu', sans-serif;
+      font-weight: 500;
+      font-size: var(--font-size-sm);
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: #2a2a2a;
+      color: rgba(255, 255, 255, 0.9);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+    }
+
+    [data-theme="light"] .header__theme-toggle {
+      background: #e0e0e0;
+      color: #1f2937;
+    }
+
+    .header__theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px var(--shadow-color);
+      background: #3a3a3a;
+      color: #ffffff;
+    }
+
+    [data-theme="light"] .header__theme-toggle:hover {
+      background: #d0d0d0;
+    }
+
+    .frame-container {
+      width: 100%;
+      margin: var(--spacing-section) 0;
+      padding: 30px 5px;
+      background: #121520;
+      box-shadow: 0 6px 30px var(--shadow-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      text-align: center;
+    }
+
+    .frame-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16/9;
+      min-height: 500px;
+      background: black;
+    }
+
+    .footer {
+      width: 100%;
+      background: rgba(18, 21, 32, 0.85);
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 16px 0;
+      margin-top: var(--spacing-section);
+      box-shadow: 0 -2px 5px var(--shadow-color);
+    }
+
+    [data-theme="light"] .footer {
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--text-primary);
+    }
+
+    .footer a {
+      color: var(--highlight-color);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color 0.2s ease;
+    }
+
+    .footer a:hover {
+      color: var(--highlight-color);
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <header class="header">
+    <div class="header__title">Solo Leveling - Frame Exclusivo</div>
+    <nav class="header__nav">
+      <button class="header__theme-toggle"><i class="fas fa-moon"></i> Tema</button>
+    </nav>
+  </header>
+
+  <div class="frame-container">
+    <div class="carousel-title">Frame Exclusivo - Solo Leveling</div>
+    <div class="frame-wrapper" id="video-player-container"></div>
+  </div>
+
+  <div class="footer">
+    <p>© 2025 Solo Leveling Frame Exclusivo. Todos os direitos reservados.</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggle = document.querySelector('.header__theme-toggle');
+      const body = document.body;
+
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = body.dataset.theme;
+        body.dataset.theme = currentTheme === 'light' ? 'dark' : 'light';
+        themeToggle.innerHTML = `<i class="fas ${body.dataset.theme === 'light' ? 'fa-sun' : 'fa-moon'}"></i> Tema`;
+      });
+
+      // Player via JavaScript
+      function criarVideoPlayer(container) {
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.width = '100%';
+        wrapper.style.height = '100%';
+
+        const video = document.createElement('video');
+        video.src = 'https://vault-99.kwik.cx/mp4/99/01/68f11a04c28a045436c765d9213f21377602ce5ac1880b41f838e89600ee217b?file=AnimePahe_Rock_wa_Lady_no_Tashinami_deshite_-_12_360p_SubsPlease.mp4';
+        video.style.width = '100%';
+        video.style.height = '100%';
+        video.controls = false;
+
+        const controls = document.createElement('div');
+        controls.style.position = 'absolute';
+        controls.style.bottom = '10px';
+        controls.style.left = '10px';
+        controls.style.right = '10px';
+        controls.style.display = 'flex';
+        controls.style.justifyContent = 'space-between';
+        controls.style.alignItems = 'center';
+        controls.style.background = 'rgba(0, 0, 0, 0.6)';
+        controls.style.padding = '8px 12px';
+        controls.style.borderRadius = '8px';
+
+        const playBtn = document.createElement('button');
+        playBtn.textContent = '▶️';
+        Object.assign(playBtn.style, {
+          background: 'none',
+          border: 'none',
+          color: '#fff',
+          fontSize: '16px',
+          cursor: 'pointer'
+        });
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.textContent = '⛶';
+        Object.assign(fullscreenBtn.style, {
+          background: 'none',
+          border: 'none',
+          color: '#fff',
+          fontSize: '16px',
+          cursor: 'pointer'
+        });
+
+        const seek = document.createElement('input');
+        seek.type = 'range';
+        seek.value = 0;
+        seek.step = 1;
+        seek.style.flex = '1';
+        seek.style.margin = '0 10px';
+
+        playBtn.onclick = () => {
+          if (video.paused) {
+            video.play();
+            playBtn.textContent = '⏸️';
+          } else {
+            video.pause();
+            playBtn.textContent = '▶️';
+          }
+        };
+
+        fullscreenBtn.onclick = () => video.requestFullscreen();
+        seek.oninput = () => video.currentTime = seek.value;
+        video.ontimeupdate = () => {
+          seek.max = video.duration;
+          seek.value = video.currentTime;
+        };
+
+        controls.appendChild(playBtn);
+        controls.appendChild(seek);
+        controls.appendChild(fullscreenBtn);
+        wrapper.appendChild(video);
+        wrapper.appendChild(controls);
+        container.appendChild(wrapper);
+      }
+
+      criarVideoPlayer(document.getElementById('video-player-container'));
+    });
+  </script>
+</body>
+</html>
