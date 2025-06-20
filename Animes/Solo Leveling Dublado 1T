@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Leveling Dublado - Primeira Temporada</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS styles will be inserted here */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --text-primary: #f9fafb;
+            --text-secondary: #b8c0d0;
+            --background: #070b17;
+            --surface: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow-color: rgba(0, 0, 0, 0.6);
+            --blur-effect: blur(12px);
+            --transition: all 0.6s ease-in-out;
+            --highlight-color: #e50914;
+            --highlight-hover: #ff1a1a;
+            --watch-later-color: #90EE90;
+            --watch-later-hover: #78D878;
+            --episodes-color: #ff6200;
+            --episodes-hover: #e55a00;
+            --report-error-color: #8b5cf6;
+            --report-error-hover: #7c3aed;
+            --menu-background: rgba(50, 50, 50, 0.65);
+            --menu-item-background: rgba(255, 255, 255, 0.2);
+            --menu-item-hover-background: rgba(255, 255, 255, 0.3);
+            --spacing-sm: 12px;
+            --spacing-md: 20px;
+            --spacing-section: 40px;
+            --font-size-xs: clamp(0.65rem, 1.5vw, 0.75rem);
+            --font-size-sm: clamp(0.8rem, 2vw, 0.9rem);
+            --font-size-md: clamp(1rem, 2.5vw, 1.1rem);
+            --font-size-lg: clamp(1.2rem, 3vw, 1.5rem);
+        }
+
+        [data-theme="light"] {
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --background: #f3f4f6;
+            --surface: rgba(0, 0, 0, 0.05);
+            --border: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --menu-background: rgba(200, 200, 200, 0.65);
+            --menu-item-background: rgba(0, 0, 0, 0.2);
+            --menu-item-hover-background: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Jura', sans-serif;
+            font-weight: 400;
+            line-height: 1.5;
+            background: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 60px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            transition: background 0.3s ease, color 0.3s ease;
+            overscroll-behavior-x: none;
+            scroll-behavior: smooth;
+        }
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.25);  /* Fundo com 25% de opacidade (mais visível) */
+    backdrop-filter: blur(12px);      /* Blur para o efeito vidro */
+    border-bottom: 1px solid transparent;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+    z-index: 1001;
+    box-shadow: none;
+}
+
+        [data-theme="light"] .header {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .header__title {
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header__nav {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .header__link, .header__theme-toggle {
+            text-decoration: none;
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-sm);
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header__link {
+            color: var(--text-primary);
+        }
+
+        .header__theme-toggle {
+            background: #2a2a2a;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .header__link:hover, .header__theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .header__link:hover {
+            background: var(--surface);
+            color: var(--highlight-color);
+        }
+
+        .header__theme-toggle:hover {
+            background: #3a3a3a;
+            color: #ffffff;
+        }
+
+        [data-theme="light"] .header__link {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .header__theme-toggle {
+            background: #e0e0e0;
+            color: #1f2937;
+        }
+
+        [data-theme="light"] .header__link:hover {
+            background: var(--surface);
+            color: var(--highlight-color);
+        }
+
+        [data-theme="light"] .header__theme-toggle:hover {
+            background: #d0d0d0;
+        }
+
+        .search-container-wrapper {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 12px;
+            background: #121520;
+            box-shadow: 0 6px 30px var(--shadow-color);
+        }
+
+        [data-theme="light"] .search-container-wrapper {
+            background: #ffffff;
+        }
+
+        .search-section {
+            width: 100%;
+            padding: 0 var(--spacing-sm);
+        }
+
+        .search-title {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: 0.4px;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) 40px;
+            font-family: 'Jura', sans-serif;
+            font-size: var(--font-size-md);
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            outline: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .search-bar:hover, .search-bar:focus {
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] .search-bar:hover, [data-theme="light"] .search-bar:focus {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--spacing-sm);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: var(--font-size-md);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:hover ~ .search-icon, .search-bar:focus ~ .search-icon {
+            color: var(--highlight-color);
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        .slideshow-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            position: relative;
+            overflow: hidden;
+            padding: 12px;
+            background: #121520;
+            box-shadow: 0 6px 30px var(--shadow-color);
+            z-index: 10;
+        }
+
+        [data-theme="light"] .slideshow-container {
+            background: #ffffff;
+        }
+
+        .info-carousel-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 12px;
+            background: #121520;
+            box-shadow: 0 6px 30px var(--shadow-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="light"] .info-carousel-container {
+            background: #ffffff;
+        }
+
+        .info-slides-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-slide {
+            display: none;
+            width: 100%;
+            transition: opacity 0.6s ease-in-out;
+        }
+
+        .info-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            padding: 8px;
+            color: #fff;
+            transition: transform 0.3s ease;
+            transform: translateY(0);
+            z-index: 10;
+        }
+
+        .info-slide .slide-content {
+            position: static;
+            background: none;
+            padding: 8px 0;
+            color: var(--text-primary);
+        }
+
+        .title {
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+            margin-bottom: 2px;
+            text-transform: lowercase;
+        }
+
+        .episode {
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .duration {
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .synopsis {
+            font-size: var(--font-size-xs);
+            color: var(--text-primary);
+            line-height: 1.3;
+            max-height: 38px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 8px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .carousel-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            text-align: center;
+            letter-spacing: 0.4px;
+        }
+
+        .thumbnail-carousel-container .carousel-title {
+            font-size: var(--font-size-sm);
+        }
+
+        .slides-wrapper {
+            height: 340px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            position: relative;
+            padding: 0 25px;
+            touch-action: pan-x;
+        }
+
+        .slide {
+            position: absolute;
+            transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out, width 0.6s ease-in-out, height 0.6s ease-in-out;
+            width: 204px;
+            height: 153px;
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: grab;
+            overflow: hidden;
+            box-shadow: 0 2px 12px var(--shadow-color);
+            will-change: transform, opacity, width, height;
+            z-index: 5;
+        }
+
+        .slide:active {
+            cursor: grabbing;
+        }
+
+        .slide.active {
+            transform: translateX(0) scale(1.15);
+            z-index: 20;
+            opacity: 1;
+            pointer-events: all;
+            width: 306px;
+            height: 229.5px;
+        }
+
+        .slide.prev {
+            transform: translateX(-130%) scale(0.9);
+            z-index: 10;
+            opacity: 0.4;
+        }
+
+        .slide.next {
+            transform: translateX(130%) scale(0.9);
+            z-index: 10;
+            opacity: 0.4;
+        }
+
+        .slide.animate-hint {
+            animation: slideHint 4s ease-in-out forwards;
+        }
+
+        @keyframes slideHint {
+            0% { transform: translateX(0) scale(1.15); }
+            50% { transform: translateX(-50%) scale(1.15); }
+            100% { transform: translateX(50%) scale(1.15); }
+            100% { transform: translateX(0) scale(1.15); }
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            loading: lazy;
+            z-index: 6;
+        }
+
+        .action-button {
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            transition: transform 0.2s ease, background 0.2s ease;
+            min-width: 70px;
+            text-align: center;
+            background: var(--highlight-color);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            transform: scale(0);
+        }
+
+        .action-button:hover::after {
+            opacity: 1;
+            transform: scale(2);
+        }
+
+        .action-button.watch-now:hover {
+            background: var(--highlight-hover);
+            transform: scale(1.05);
+        }
+
+        .action-button.next-ep {
+            background: var(--episodes-color);
+        }
+
+        .action-button.next-ep:hover {
+            background: var(--episodes-hover);
+            transform: scale(1.05);
+        }
+
+        .action-button.share {
+            background: #25D366;
+        }
+
+        .action-button.share:hover {
+            background: #1DA851;
+            transform: scale(1.05);
+        }
+
+        .action-button.watch-later {
+            background: var(--watch-later-color);
+        }
+
+        .action-button.watch-later:hover {
+            background: var(--watch-later-hover);
+            transform: scale(1.05);
+        }
+
+        .action-button.episodes {
+            background: var(--episodes-color);
+        }
+
+        .action-button.episodes:hover {
+            background: var(--episodes-hover);
+            transform: scale(1.05);
+        }
+
+        .action-button.report-error {
+            background: var(--report-error-color);
+        }
+
+        .action-button.report-error:hover {
+            background: var(--report-error-hover);
+            transform: scale(1.05);
+        }
+
+        .action-button:disabled {
+            background: #808080;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .share-options {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--menu-background);
+            backdrop-filter: blur(8px);
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 3001;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .share-options.active {
+            display: flex;
+        }
+
+        .share-option {
+            padding: 10px 20px;
+            background: var(--menu-item-background);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: background 0.2s ease;
+        }
+
+        .share-option:hover {
+            background: var(--menu-item-hover-background);
+        }
+
+        .button-carousel-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 6px;
+            background: var(--surface);
+            text-align: center;
+        }
+
+        .button-carousel {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px;
+        }
+
+        .button-carousel .action-button {
+            padding: 8px 16px;
+            font-size: var(--font-size-sm);
+            min-width: 120px;
+        }
+
+        .thumbnail-carousel-container {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 6px;
+            background: var(--surface);
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            cursor: grab;
+            position: relative;
+            touch-action: pan-x;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .thumbnail-carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .thumbnail-carousel-container:active {
+            cursor: grabbing;
+        }
+
+        .thumbnail-carousel {
+            display: flex;
+            justify-content: flex-start;
+            gap: 6px;
+        }
+
+        .thumbnail {
+            width: 76.5px;
+            height: 57.375px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            border: 1.5px solid transparent;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+            will-change: opacity, transform;
+        }
+
+        .thumbnail.active {
+            opacity: 1;
+            border-color: var(--highlight-color);
+            transform: scale(1.08);
+            box-shadow: 0 0 8px rgba(229, 9, 20, 0.5);
+        }
+
+        .thumbnail:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            loading: lazy;
+        }
+
+        .thumbnail-number {
+            position: absolute;
+            bottom: 2px;
+            left: 2px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            font-size: var(--font-size-xs);
+            padding: 1px 3px;
+        }
+
+        [data-theme="light"] .thumbnail-number {
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--text-primary);
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-primary);
+            font-size: var(--font-size-xs);
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .swipe-indicator {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-primary);
+        }
+
+        .swipe-left {
+            left: 10px;
+        }
+
+        .swipe-right {
+            right: 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            background: rgba(18, 21, 32, 0.95);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+            font-size: var(--font-size-md);
+            font-weight: 500;
+            text-align: center;
+            border-radius: 8px;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        [data-theme="light"] .notification {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-primary);
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .anime-info {
+            max-width: 800px;
+            width: 95%;
+            margin: var(--spacing-section) auto;
+            padding: 17px;
+            background: var(--surface);
+            box-shadow: 0 4px 20px var(--shadow-color);
+            color: var(--text-primary);
+        }
+
+        .anime-info h2 {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--highlight-color);
+        }
+
+        .anime-info p {
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .footer {
+            width: 100%;
+            background: rgba(18, 21, 32, 0.85);
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 16px 0;
+            margin-top: var(--spacing-section);
+            box-shadow: 0 -2px 5px var(--shadow-color);
+        }
+
+        [data-theme="light"] .footer {
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--text-primary);
+        }
+
+        .footer a {
+            color: var(--highlight-color);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.2s ease;
+        }
+
+        .footer a:hover {
+            color: var(--highlight-hover);
+        }
+
+        .episodes-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: var(--menu-background);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .episodes-menu.open {
+            left: 0;
+        }
+
+        .episodes-menu__title {
+            font-size: var(--font-size-md);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .episodes-menu__list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .episodes-menu__item {
+            background: var(--menu-item-background);
+            color: var(--text-primary);
+            border: none;
+            padding: 10px;
+            text-align: left;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            border-radius: 4px;
+            border: 2px solid transparent;
+        }
+
+        .episodes-menu__item.last-watched {
+            border-color: var(--highlight-color);
+        }
+
+        .episodes-menu__item:hover {
+            background: var(--menu-item-hover-background);
+        }
+
+        .episodes-menu__overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2999;
+            display: none;
+        }
+
+        .episodes-menu__overlay.active {
+            display: block;
+        }
+
+        #searchEpisodes {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .comments-section {
+            margin-top: 20px;
+        }
+
+        #commentText {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        #saveComment, #shareComment {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            background: var(--highlight-color);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #commentsList {
+            margin-top: 10px;
+        }
+
+        .comment {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .skeleton-slide {
+            width: 306px;
+            height: 229.5px;
+            background: linear-gradient(90deg, var(--surface), #444, var(--surface));
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s ease-in-out infinite;
+            border-radius: 4px;
+            margin: 0 auto;
+        }
+
+        .skeleton-thumbnail {
+            width: 76.5px;
+            height: 57.375px;
+            background: linear-gradient(90deg, var(--surface), #444, var(--surface));
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s ease-in-out infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeletonLoading {
+            0% {
+                background-position: 100% 0;
+            }
+            100% {
+                background-position: -100% 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-section: 25px;
+            }
+
+            body {
+                padding-top: 50px;
+            }
+
+            .header {
+                height: 50px;
+                padding: 0 var(--spacing-sm);
+            }
+
+            .header__title {
+                font-size: var(--font-size-md);
+            }
+
+            .header__link, .header__theme-toggle {
+                font-size: var(--font-size-xs);
+                padding: 6px 10px;
+            }
+
+            .search-title {
+                font-size: var(--font-size-xs);
+            }
+
+            .search-bar {
+                padding: 10px 15px 10px 35px;
+                font-size: var(--font-size-sm);
+            }
+
+            .search-icon {
+                font-size: var(--font-size-sm);
+                left: 10px;
+            }
+
+            .slides-wrapper {
+                height: 289px;
+                gap: 25.5px;
+                padding: 0 12px;
+            }
+
+            .slide {
+                width: 170px;
+                height: 127.5px;
+            }
+
+            .slide.active {
+                width: 255px;
+                height: 191.25px;
+            }
+
+            .slide.prev {
+                transform: translateX(-110%) scale(0.9);
+            }
+
+            .slide.next {
+                transform: translateX(110%) scale(0.9);
+            }
+
+            .title {
+                font-size: var(--font-size-xs);
+            }
+
+            .episode, .duration, .synopsis {
+                font-size: calc(var(--font-size-xs) * 0.85);
+            }
+
+            .actions .action-button {
+                padding: 4.25px 8.5px;
+                font-size: calc(var(--font-size-xs) * 0.85);
+                min-width: 59.5px;
+            }
+
+            .button-carousel .action-button {
+                padding: 6px 12px;
+                font-size: var(--font-size-xs);
+                min-width: 100px;
+            }
+
+            .thumbnail {
+                width: 68px;
+                height: 51px;
+            }
+
+            .thumbnail-number {
+                font-size: calc(var(--font-size-xs) * 0.85);
+            }
+
+            .notification {
+                font-size: var(--font-size-sm);
+                padding: 10px 20px;
+                width: 300px;
+            }
+
+            .episodes-menu {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slides-wrapper {
+                height: 250px;
+            }
+
+            .slide {
+                width: 150px;
+                height: 112.5px;
+            }
+
+            .slide.active {
+                width: 225px;
+                height: 168.75px;
+            }
+
+            .thumbnail {
+                width: 60px;
+                height: 45px;
+            }
+        }
+
+
+@media (max-width: 768px) {
+    .image-frame {
+        border-width: 3px;
+    }
+}
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Autour+One&family=Caveat:wght@400..700&family=Girassol&family=Give+You+Glory&family=Jura:wght@300..700&family=Stint+Ultra+Condensed&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+</head>
+</div>
+<body data-theme="light">
+<header class="header">
+    <button class="header__theme-toggle" aria-label="Alternar tema">
+        <i class="fas fa-sun"></i> Tema
+    </button>
+</header>
+    </div>
+    <div class="anime-info-carousel-container" id="animeInfoCarousel">
+        <h2 class="anime-highlight-title">Assista Solo Leving 1 Temporada</h2>
+    </div>
+
+    </div>
+    <div class="slideshow-container" id="slideshow-container" aria-live="polite">
+        <div class="carousel-section">
+            <div class="carousel-title" id="carouselTitle">Solo Leveling Dublado - Primeira Temporada - Episódio 1</div>
+            <div class="slides-wrapper" id="slidesWrapper">
+                <div class="swipe-indicator swipe-left">← Deslizar (1 dedo)</div>
+                <div class="swipe-indicator swipe-right">Deslizar (1 dedo) →</div>
+            </div>
+        </div>
+    </div>
+    <div class="info-carousel-container" id="infoCarousel">
+        <div class="info-slides-wrapper" id="infoSlidesWrapper"></div>
+    </div>
+    <div class="button-carousel-container" id="buttonCarousel">
+        <div class="button-carousel" id="buttonCarouselInner"></div>
+    </div>
+    <div class="thumbnail-carousel-container" id="thumbnailCarousel">
+        <div class="carousel-title">episódios</div>
+        <div class="thumbnail-carousel" id="thumbnails"></div>
+    </div>
+    <div class="anime-info">
+        <h2>Sobre Solo Leveling Dublado - Primeira Temporada</h2>
+        <p><strong>Gênero:</strong> Ação, Aventura, Fantasia, Sobrenatural</p>
+        <p><strong>Estúdio:</strong> A-1 Pictures</p>
+        <p><strong>Diretor:</strong> Shunsuke Nakashige</p>
+        <p><strong>Ano:</strong> 2024</p>
+        <p><strong>Total de Episódios:</strong> 12</p>
+        <p><strong>Sinopse:</strong> Em um mundo onde portais conectam a Terra com dimensões repletas de monstros, apenas caçadores podem enfrentá-los para proteger a humanidade. Sung Jin-Woo, considerado o caçador mais fraco de todos, recebe uma oportunidade única de se tornar mais forte ao despertar um misterioso sistema que apenas ele pode ver. Acompanhe sua jornada de ascensão de um simples caçador de rank E para uma lenda imortal.</p>
+    </div>
+    <div class="anime-info-carousel-container" id="animeInfoCarousel">
+        <h2 class="anime-highlight-title">Trailer Oficial</h2>
+    </div>
+    <div<div class="youtube-video" style="margin: 20px auto; max-width: 800px; text-align: center;">
+    <iframe width="100%" height="270" src="https://www.youtube.com/embed/MWrsQmBIkhM" 
+    title="Solo Leveling AMV" frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen></iframe>
+</div>
+
+    <div class="notification" id="notification"></div>
+    <div class="episodes-menu" id="episodesMenu">
+        <div class="episodes-menu__title">Lista de Episódios</div>
+        <input type="text" id="searchEpisodes" placeholder="Buscar episódios...">
+        <div class="episodes-menu__list" id="episodesMenuList"></div>
+        <div class="comments-section">
+            <h3>Comentários</h3>
+            <textarea id="commentText" placeholder="Digite seu comentário..."></textarea>
+            <button id="saveComment">Salvar Comentário</button>
+            <button id="shareComment">Compartilhar no Grupo</button>
+            <div id="commentsList"></div>
+        </div>
+    </div>
+    <div class="episodes-menu__overlay" id="episodesMenuOverlay"></div>
+    <div class="share-options" id="shareOptions">
+        <button class="share-option" data-platform="whatsapp">Compartilhar via WhatsApp</button>
+        <button class="share-option" data-platform="facebook">Compartilhar via Facebook</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slideshowContainer = document.getElementById('slideshow-container');
+            const notification = document.getElementById('notification');
+            const themeToggle = document.querySelector('.header__theme-toggle');
+            const body = document.body;
+            const episodesMenu = document.getElementById('episodesMenu');
+            const episodesMenuList = document.getElementById('episodesMenuList');
+            const episodesMenuOverlay = document.getElementById('episodesMenuOverlay');
+            const thumbnailCarousel = document.getElementById('thumbnailCarousel');
+            const buttonCarouselInner = document.getElementById('buttonCarouselInner');
+            const infoCarousel = document.getElementById('infoCarousel');
+            const infoSlidesWrapper = document.getElementById('infoSlidesWrapper');
+            const shareOptions = document.getElementById('shareOptions');
+            const carouselTitle = document.getElementById('carouselTitle');
+            const searchEpisodes = document.getElementById('searchEpisodes');
+            const commentText = document.getElementById('commentText');
+            const saveComment = document.getElementById('saveComment');
+            const shareComment = document.getElementById('shareComment');
+            const commentsList = document.getElementById('commentsList');
+
+            const config = {
+series: [
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 1",
+        duration: "23 minutos",
+        synopsis: "Sung Jin-Woo enfrenta um portal de rank duplo e descobre o quanto é fraco diante dos monstros.",
+        image: "https://i.postimg.cc/J751wFTb/1347366.png",
+        link: "https://animeigeek.github.io/solo-leveling-ep1/",
+        adLink: "https://s.shopee.com.br/2LMZNjhvPh"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 2",
+        duration: "23 minutos",
+        synopsis: "Após o massacre na masmorra, Jin-Woo acorda no hospital e percebe que algo dentro dele mudou.",
+        image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+        link: "https://drive.google.com/file/d/1SlKpiimOL7HClJeFBeRvt-zXCkXIwv3p/view?usp=drivesdk",
+        adLink: "https://www.profitableratecpm.com/bhc54ix0?key=0d0a06ce57c66dc7b36d2e4d88aed9e1"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 3",
+        duration: "23 minutos",
+        synopsis: "Jin-Woo recebe as primeiras missões do misterioso sistema e começa seu novo treinamento.",
+        image: "https://i.postimg.cc/J751wFTb/1347366.png",
+        link: "https://drive.google.com/file/d/1m2kmXj5-BWhwzhT6mOM13Y_XMPYOfpy4/view?usp=drivesdk",
+        adLink: "https://otieu.com/4/9066482"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 4",
+        duration: "23 minutos",
+        synopsis: "Em uma nova dungeon, Jin-Woo enfrenta lobos brutais e descobre que está evoluindo rapidamente.",
+        image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+        link: "https://drive.google.com/file/d/1-6VNGioT_7WXagFEvjLfNT1cYlrh8I-o/view?usp=drivesdk",
+        adLink: "https://s.shopee.com.br/2LMZNjhvPh"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 5",
+        duration: "23 minutos",
+        synopsis: "Jin-Woo desafia sozinho uma dungeon de rank mais alto e surpreende a todos com sua força.",
+        image: "https://i.postimg.cc/J751wFTb/1347366.png",
+        link: "https://drive.google.com/file/d/1SndOmjiH4qIIPr7OsvJ4da-ePKmeg7kV/view?usp=drivesdk",
+        adLink: "https://www.profitableratecpm.com/bhc54ix0?key=0d0a06ce57c66dc7b36d2e4d88aed9e1"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 6",
+        duration: "23 minutos",
+        synopsis: "Um confronto direto com um chefe de dungeon coloca as novas habilidades de Jin-Woo à prova.",
+        image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+        link: "https://drive.google.com/file/d/11m7AvxbgnAM1DpBpVjp9LfxHC3zkfFLD/view?usp=drivesdk",
+        adLink: "https://otieu.com/4/9066482"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 7",
+        duration: "23 minutos",
+        synopsis: "Jin-Woo recruta suas primeiras sombras e inicia uma nova fase como caçador solo.",
+        image: "https://i.postimg.cc/J751wFTb/1347366.png",
+        link: "https://drive.google.com/file/d/1Jj5kY7-4VhVr2Aq13Us04YdgmaBpox_W/view?usp=drivesdk",
+        adLink: "https://s.shopee.com.br/2LMZNjhvPh"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 8",
+        duration: "23 minutos",
+        synopsis: "Durante uma caçada, Jin-Woo salva caçadores em perigo e começa a chamar atenção da Associação.",
+        image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+        link: "https://drive.google.com/file/d/1e080Peh2R_gbGKI2U4gEKZmgyyrhCtI3/view?usp=drivesdk",
+        adLink: "https://www.profitableratecpm.com/bhc54ix0?key=0d0a06ce57c66dc7b36d2e4d88aed9e1"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 9",
+        duration: "23 minutos",
+        synopsis: "O passado de Jin-Woo com sua família é mostrado enquanto ele aceita uma missão perigosa.",
+        image: "https://i.postimg.cc/J751wFTb/1347366.png",
+        link: "https://drive.google.com/file/d/1mhBCj4Aygl6vFbKVg1bCgtYARh2Kqwkk/view?usp=drivesdk",
+        adLink: "https://otieu.com/4/9066482"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 10",
+        duration: "23 minutos",
+        synopsis: "Jin-Woo enfrenta uma guilda inteira dentro de uma dungeon e mostra seu verdadeiro poder.",
+        image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+        link: "https://drive.google.com/file/d/1oelzDuS5Mh9Utvn1aoRhEe76QKtED6yv/view?usp=drivesdk",
+        adLink: "https://s.shopee.com.br/2LMZNjhvPh"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 11",
+        duration: "23 minutos",
+        synopsis: "As consequências da batalha se espalham e os líderes das guildas começam a notar Jin-Woo.",
+        image: "https://i.postimg.cc/J751wFTb/1347366.png",
+        link: "https://drive.google.com/file/d/1cs619uoToQduLDjh_945dEJoQZKOi2Vn/view?usp=drivesdk",
+        adLink: "https://www.profitableratecpm.com/bhc54ix0?key=0d0a06ce57c66dc7b36d2e4d88aed9e1"
+    },
+    {
+        title: "Solo Leveling - Primeira Temporada",
+        episode: "Ep. 12",
+        duration: "23 minutos",
+        synopsis: "Jin-Woo enfrenta seu maior desafio até agora, provando que sua ascensão está apenas começando.",
+        image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+        link: "https://drive.google.com/file/d/1ZSOqUcV72xG6rACJ8Mns8MsY_9aBbLLq/view?usp=drivesdk",
+        adLink: "https://otieu.com/4/9066482"
+    }
+],
+                swipeThreshold: 100,
+                adLink: "https://otieu.com/4/9277353",
+                watchLaterBaseLink: "https://animeigeek.github.io/solo-leveling/",
+                shareLink: "https://animeigeek.github.io/solo-leveling/"
+            };
+
+            let state = {
+                currentSlide: parseInt(localStorage.getItem('currentSlide')) || 0,
+                isDraggingSlides: false,
+                isDraggingThumbnails: false,
+                startX: 0,
+                currentX: 0,
+                thumbnailScrollStart: 0,
+                thumbnailScrollPos: 0,
+                lastTouchTime: 0,
+                thumbnailWidth: 0,
+                thumbnailsVisible: 0,
+                isAdNext: true,
+                isWatchNowBlocked: false,
+                isEpisodesMenuOpen: false,
+                lastWatchedEpisode: parseInt(localStorage.getItem('lastWatchedEpisode')) || null,
+                menuScrollPosition: parseInt(localStorage.getItem('menuScrollPosition')) || 0
+            };
+
+            let elements = {
+                slidesWrapper: document.getElementById('slidesWrapper'),
+                thumbnails: document.getElementById('thumbnails'),
+                episodesMenu: episodesMenu,
+                episodesMenuList: episodesMenuList,
+                episodesMenuOverlay: episodesMenuOverlay,
+                thumbnailCarousel: thumbnailCarousel,
+                buttonCarouselInner: buttonCarouselInner,
+                infoCarousel: infoCarousel,
+                infoSlidesWrapper: infoSlidesWrapper,
+                shareOptions: shareOptions,
+                carouselTitle: carouselTitle
+            };
+
+            function initialize() {
+                restoreState();
+                createCarousels();
+                createEpisodesMenu();
+                updateThumbnailMetrics();
+                setupEventListeners();
+                triggerSlideAnimation();
+                loadCommentsFromLocalStorage();
+                checkTimeAndToggleTheme();
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(updateThumbnailMetrics, 100);
+                });
+            }
+
+            function restoreState() {
+                state.currentSlide = Math.max(0, Math.min(config.series.length - 1, state.currentSlide));
+                goToSlide(state.currentSlide);
+            }
+
+            function saveState() {
+                localStorage.setItem('currentSlide', state.currentSlide);
+                localStorage.setItem('menuScrollPosition', state.menuScrollPosition);
+            }
+
+            function triggerSlideAnimation() {
+                const activeSlide = elements.slidesWrapper.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.add('animate-hint');
+                    showNotification('Deslize para o próximo ou anterior episódio');
+                    setTimeout(() => {
+                        activeSlide.classList.remove('animate-hint');
+                    }, 4000);
+                }
+            }
+
+            function updateThumbnailMetrics() {
+                const thumbnail = elements.thumbnails.querySelector('.thumbnail');
+                if (thumbnail) {
+                    state.thumbnailWidth = thumbnail.offsetWidth + 6;
+                    state.thumbnailsVisible = Math.floor(elements.thumbnails.offsetWidth / state.thumbnailWidth);
+                    updateThumbnailsPosition();
+                }
+            }
+
+            function createCarousels() {
+                elements.slidesWrapper.innerHTML = `
+                    <div class="swipe-indicator swipe-left">← Deslizar (1 dedo)</div>
+                    <div class="swipe-indicator swipe-right">Deslizar (1 dedo) →</div>
+                `;
+                elements.thumbnails.innerHTML = '';
+                elements.buttonCarouselInner.innerHTML = '';
+                elements.infoSlidesWrapper.innerHTML = '';
+
+                const items = config.series;
+
+                items.forEach((item, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.dataset.index = index;
+                    slide.setAttribute('aria-label', `Episódio ${item.episode}: ${item.title}`);
+                    slide.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/360x270?text=Imagem+Indisponível'">
+                    `;
+                    elements.slidesWrapper.appendChild(slide);
+
+                    const nextIndex = (index + 1) % items.length;
+                    const nextEpisode = items[nextIndex].episode.replace('Ep. ', '');
+                    const infoSlide = document.createElement('div');
+                    infoSlide.className = 'info-slide';
+                    infoSlide.dataset.index = index;
+                    infoSlide.innerHTML = `
+                        <div class="slide-content">
+                            <div class="title">${item.title.toLowerCase()}</div>
+                            <div class="episode">${item.episode}</div>
+                            <div class="duration">${item.duration}</div>
+                            <div class="synopsis">${item.synopsis || 'Sinopse indisponível'}</div>
+                            <div class="actions">
+                                <button class="action-button watch-now" aria-label="Assistir ${item.title} ${item.episode} agora" data-index="${index}">▶ Assistir agora</button>
+                                <button class="action-button next-ep" aria-label="Ir para o próximo episódio ${nextEpisode}" data-index="${nextIndex}">Próximo Ep. ${nextEpisode}</button>
+                                <button class="action-button share" aria-label="Compartilhar ${item.title} ${item.episode}" data-index="${index}">📤 Compartilhar</button>
+                            </div>
+                        </div>
+                    `;
+                    elements.infoSlidesWrapper.appendChild(infoSlide);
+
+                    const thumbnail = document.createElement('button');
+                    thumbnail.className = 'thumbnail';
+                    thumbnail.dataset.index = index;
+                    thumbnail.setAttribute('aria-label', `Selecionar episódio ${item.episode}`);
+                    thumbnail.innerHTML = `
+                        <img src="${item.image}" alt="Thumbnail ${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/90x67.5?text=Thumbnail'">
+                        <div class="thumbnail-number">${item.episode}</div>
+                    `;
+                    thumbnail.onclick = () => goToSlide(index);
+                    elements.thumbnails.appendChild(thumbnail);
+                });
+
+                elements.buttonCarouselInner.innerHTML = `
+                    <button class="action-button watch-later" aria-label="Assistir depois">⏰ Assistir depois</button>
+                    <button class="action-button episodes" aria-label="Ver lista de episódios">📑 Episódios</button>
+                    <button class="action-button report-error" aria-label="Reportar erro">⚠ Reportar Erro</button>
+                `;
+                elements.buttonCarouselInner.querySelector('.watch-later').onclick = () => watchLater(state.currentSlide);
+                elements.buttonCarouselInner.querySelector('.episodes').onclick = openEpisodesMenu;
+                elements.buttonCarouselInner.querySelector('.report-error').onclick = () => reportError(state.currentSlide);
+
+                elements.infoSlidesWrapper.querySelectorAll('.watch-now').forEach(button => {
+                    button.onclick = () => watchNow(parseInt(button.dataset.index));
+                });
+                elements.infoSlidesWrapper.querySelectorAll('.next-ep').forEach(button => {
+                    button.onclick = () => goToSlide(parseInt(button.dataset.index));
+                });
+                elements.infoSlidesWrapper.querySelectorAll('.share').forEach(button => {
+                    button.onclick = () => showShareOptions(parseInt(button.dataset.index));
+                });
+
+                updateSlides();
+                updateInfoSlide(state.currentSlide);
+            }
+
+            function createEpisodesMenu() {
+                elements.episodesMenuList.innerHTML = '';
+                config.series.forEach((item, index) => {
+                    const episodeButton = document.createElement('button');
+                    episodeButton.className = `episodes-menu__item ${index === state.lastWatchedEpisode ? 'last-watched' : ''}`;
+                    episodeButton.dataset.index = index;
+                    episodeButton.textContent = `${item.episode}: ${item.synopsis.substring(0, 50)}${item.synopsis.length > 50 ? '...' : ''}`;
+                    episodeButton.setAttribute('aria-label', `Selecionar ${item.episode}`);
+                    episodeButton.onclick = () => selectEpisode(index);
+                    elements.episodesMenuList.appendChild(episodeButton);
+                });
+            }
+
+            function setupEventListeners() {
+                elements.slidesWrapper.addEventListener('click', handleSlideClick);
+                elements.slidesWrapper.addEventListener('touchstart', touchStartSlides, { passive: true });
+                elements.slidesWrapper.addEventListener('touchmove', touchMoveSlides, { passive: false });
+                elements.slidesWrapper.addEventListener('touchend', touchEndSlides, { passive: true });
+                elements.slidesWrapper.addEventListener('wheel', handleWheel, { passive: true });
+                elements.thumbnails.addEventListener('touchstart', touchStartThumbnails, { passive: true });
+                elements.thumbnails.addEventListener('touchmove', touchMoveThumbnails, { passive: false });
+                elements.thumbnails.addEventListener('touchend', touchEndThumbnails, { passive: true });
+                document.addEventListener('keydown', handleKeyboardNavigation);
+                themeToggle.addEventListener('click', toggleTheme);
+                elements.episodesMenuOverlay.addEventListener('click', closeEpisodesMenu);
+                searchEpisodes.addEventListener('input', filterEpisodes);
+                saveComment.addEventListener('click', saveCommentHandler);
+                shareComment.addEventListener('click', shareCommentHandler);
+                elements.shareOptions.querySelectorAll('.share-option').forEach(option => {
+                    option.onclick = () => handleShare(option.dataset.platform, parseInt(option.dataset.index));
+                });
+                elements.episodesMenu.addEventListener('scroll', handleMenuScroll);
+            }
+
+            function handleMenuScroll() {
+                state.menuScrollPosition = elements.episodesMenu.scrollTop;
+                saveState();
+            }
+
+            function handleSlideClick(e) {
+                const slide = e.target.closest('.slide');
+                if (!slide) return;
+                const index = parseInt(slide.dataset.index);
+                e.stopPropagation();
+                e.preventDefault();
+                goToSlide(index);
+            }
+
+            function handleKeyboardNavigation(e) {
+                if (e.key === 'ArrowLeft') prevSlide();
+                else if (e.key === 'ArrowRight') nextSlide();
+                else if (e.key === 'Enter' && document.activeElement.classList.contains('thumbnail')) {
+                    goToSlide(parseInt(document.activeElement.dataset.index));
+                }
+            }
+
+            function handleWheel(e) {
+                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                    e.preventDefault();
+                    return;
+                }
+                e.preventDefault();
+                if (e.deltaX > 0) nextSlide();
+                else prevSlide();
+            }
+
+            let lastTouchMoveSlides = 0;
+            function touchStartSlides(e) {
+                state.isDraggingSlides = true;
+                state.startX = e.touches[0].clientX;
+                state.lastTouchTime = Date.now();
+                updateSwipeIndicators();
+            }
+
+            function touchMoveSlides(e) {
+                if (!state.isDraggingSlides) return;
+                const now = Date.now();
+                if (now - lastTouchMoveSlides < 16) return;
+                lastTouchMoveSlides = now;
+                state.currentX = e.touches[0].clientX;
+                const deltaX = state.startX - state.currentX;
+                const deltaY = Math.abs(e.touches[0].clientY - e.touches[0].clientY);
+                if (deltaY > Math.abs(deltaX)) {
+                    e.preventDefault();
+                    return;
+                }
+                e.preventDefault();
+                const slides = elements.slidesWrapper.querySelectorAll('.slide');
+                const maxTranslate = 130;
+                slides.forEach((slide, i) => {
+                    const isActive = i === state.currentSlide;
+                    const isPrev = i === (state.currentSlide - 1 + config.series.length) % config.series.length;
+                    const isNext = i === (state.currentSlide + 1) % config.series.length;
+                    let translateX = 0;
+                    let scale = 0.9;
+                    let opacity = 0.4;
+
+                    if (isPrev) {
+                        translateX = -maxTranslate + (deltaX / 1.5);
+                        opacity = Math.min(1, 0.4 + Math.abs(deltaX / 300));
+                        scale = Math.min(0.9, 0.9 + (Math.abs(deltaX) / 1000));
+                    } else if (isNext) {
+                        translateX = maxTranslate - (deltaX / 1.5);
+                        opacity = Math.min(1, 0.4 + Math.abs(deltaX / 300));
+                        scale = Math.min(0.9, 0.9 + (Math.abs(deltaX) / 1000));
+                    } else if (isActive) {
+                        translateX = deltaX / 5;
+                        opacity = 1;
+                        scale = 1.15;
+                    }
+
+                    slide.style.transform = `translateX(${translateX}%) scale(${scale})`;
+                    slide.style.opacity = opacity;
+                });
+                requestAnimationFrame(updateSwipeIndicators);
+            }
+
+            function touchEndSlides(e) {
+                if (!state.isDraggingSlides) return;
+                const diffX = state.startX - state.currentX;
+                const timeElapsed = Date.now() - state.lastTouchTime;
+                if (Math.abs(diffX) > config.swipeThreshold && timeElapsed > 100) {
+                    if (diffX > 0) nextSlide();
+                    else prevSlide();
+                }
+                state.isDraggingSlides = false;
+                state.startX = 0;
+                state.currentX = 0;
+                updateSlides();
+                updateSwipeIndicators();
+            }
+
+            let lastTouchMoveThumbnails = 0;
+            function touchStartThumbnails(e) {
+                state.isDraggingThumbnails = true;
+                state.startX = e.touches[0].clientX;
+                state.thumbnailScrollStart = state.thumbnailScrollPos;
+                e.preventDefault();
+            }
+
+            function touchMoveThumbnails(e) {
+                if (!state.isDraggingThumbnails) return;
+                const now = Date.now();
+                if (now - lastTouchMoveThumbnails < 16) return;
+                lastTouchMoveThumbnails = now;
+                e.preventDefault();
+                const currentX = e.touches[0].clientX;
+                const diffX = state.startX - currentX;
+                state.thumbnailScrollPos = state.thumbnailScrollStart + diffX;
+                const maxScroll = Math.max(0, elements.thumbnails.scrollWidth - elements.thumbnails.offsetWidth);
+                state.thumbnailScrollPos = Math.min(maxScroll, Math.max(0, state.thumbnailScrollPos));
+                elements.thumbnails.style.transform = `translateX(-${state.thumbnailScrollPos}px)`;
+            }
+
+            function touchEndThumbnails(e) {
+                if (!state.isDraggingThumbnails) return;
+                state.isDraggingThumbnails = false;
+                snapThumbnails();
+            }
+
+            function snapThumbnails() {
+                const closestIndex = Math.round(state.thumbnailScrollPos / state.thumbnailWidth);
+                state.thumbnailScrollPos = closestIndex * state.thumbnailWidth;
+                const maxScroll = Math.max(0, elements.thumbnails.scrollWidth - elements.thumbnails.offsetWidth);
+                state.thumbnailScrollPos = Math.min(maxScroll, Math.max(0, state.thumbnailScrollPos));
+                elements.thumbnails.style.transition = 'transform 0.5s ease-in-out';
+                elements.thumbnails.style.transform = `translateX(-${state.thumbnailScrollPos}px)`;
+                setTimeout(() => {
+                    elements.thumbnails.style.transition = '';
+                }, 500);
+            }
+
+            function updateSwipeIndicators() {
+                const indicators = elements.slidesWrapper.querySelectorAll('.swipe-indicator');
+                indicators.forEach(indicator => {
+                    indicator.style.opacity = state.isDraggingSlides ? '1' : '0';
+                });
+            }
+
+            function updateSlides() {
+                requestAnimationFrame(() => {
+                    const slides = elements.slidesWrapper.querySelectorAll('.slide');
+                    const thumbnails = elements.thumbnails.querySelectorAll('.thumbnail');
+                    const items = config.series;
+
+                    elements.carouselTitle.textContent = `Solo Leveling -- Primeira Temporada -- Episódio ${items[state.currentSlide].episode.replace('Ep.','')}`;
+
+// Trocar a cor de fundo do título com base no episódio
+const titleElement = elements.carouselTitle;
+const targetColor = (state.currentSlide % 2 === 0) ? '#000000' : '#92a2bb';
+titleElement.style.transition = 'background-color 0.8s ease';
+titleElement.style.backgroundColor = targetColor;
+// Corrige a cor da fonte para manter contraste
+if (targetColor === '#000000') {
+    titleElement.style.color = '#ffffff';  // Texto branco se fundo for preto
+} else {
+    titleElement.style.color = '#000000';  // Texto preto se fundo for azul claro
+}
+titleElement.style.fontFamily = "'Jura', sans-serif";
+
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'prev', 'next');
+                        if (i === state.currentSlide) {
+                            slide.classList.add('active');
+                            slide.style.transform = 'translateX(0) scale(1.15)';
+                            slide.style.opacity = '1';
+                            slide.style.width = '306px';
+                            slide.style.height = '229.5px';
+
+                        } else {
+                            if (i === (state.currentSlide - 1 + items.length) % items.length) {
+                                slide.classList.add('prev');
+                                slide.style.transform = 'translateX(-130%) scale(0.9)';
+                            } else if (i === (state.currentSlide + 1) % items.length) {
+                                slide.classList.add('next');
+                                slide.style.transform = 'translateX(130%) scale(0.9)';
+                            }
+                            slide.style.opacity = '0.4';
+                            slide.style.width = '204px';
+                            slide.style.height = '153px';
+                        }
+                    });
+
+                    thumbnails.forEach((thumbnail, i) => {
+                        thumbnail.classList.toggle('active', i === state.currentSlide);
+                    });
+
+                    updateThumbnailsPosition();
+                    updateInfoSlide(state.currentSlide);
+                    saveState();
+                });
+            }
+
+            function updateInfoSlide(index) {
+                const infoSlides = elements.infoSlidesWrapper.querySelectorAll('.info-slide');
+                infoSlides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+            }
+
+            function updateThumbnailsPosition() {
+                if (state.thumbnailsVisible) {
+                    const offset = (state.currentSlide - Math.floor(state.thumbnailsVisible / 2)) * state.thumbnailWidth;
+                    state.thumbnailScrollPos = Math.max(0, offset);
+                    const maxScroll = Math.max(0, elements.thumbnails.scrollWidth - elements.thumbnails.offsetWidth);
+                    state.thumbnailScrollPos = Math.min(maxScroll, state.thumbnailScrollPos);
+                    elements.thumbnails.style.transform = `translateX(-${state.thumbnailScrollPos}px)`;
+                }
+            }
+
+            function nextSlide() {
+                state.currentSlide = (state.currentSlide + 1) % config.series.length;
+                updateSlides();
+            }
+
+            function prevSlide() {
+                state.currentSlide = (state.currentSlide - 1 + config.series.length) % config.series.length;
+                updateSlides();
+            }
+
+            function goToSlide(index) {
+                state.currentSlide = index;
+                updateSlides();
+            }
+
+            function toggleWatchNowButtons(enabled) {
+                const buttons = document.querySelectorAll('.watch-now');
+                buttons.forEach(button => {
+                    button.disabled = !enabled;
+                });
+            }
+
+            function watchNow(index) {
+                const item = config.series[index];
+                if (!item || !item.link || state.isWatchNowBlocked) {
+                    showNotification('Erro ao acessar o episódio. Tente novamente.');
+                    return;
+                }
+                state.isWatchNowBlocked = true;
+                toggleWatchNowButtons(false);
+
+                state.lastWatchedEpisode = index;
+                localStorage.setItem('lastWatchedEpisode', index);
+                createEpisodesMenu();
+
+                const message = state.isAdNext
+                    ? 'Você será redirecionado para uma propaganda. Volte para assistir ao vídeo.'
+                    : 'Você será redirecionado para o vídeo do episódio no Google Drive.';
+                showNotification(message);
+
+                setTimeout(() => {
+                    try {
+                        const url = state.isAdNext ? item.adLink : item.link;
+                        const win = window.open(url, '_blank');
+                        if (!win) {
+                            showNotification('Pop-up bloqueado. Permita pop-ups e tente novamente.');
+                        }
+                        state.isAdNext = !state.isAdNext;
+                    } catch (e) {
+                        showNotification('Erro ao redirecionar. Tente novamente.');
+                    }
+
+                    const unlockDelay = state.isAdNext ? 2000 : 0;
+                    setTimeout(() => {
+                        state.isWatchNowBlocked = false;
+                        toggleWatchNowButtons(true);
+                    }, unlockDelay);
+                }, 4000);
+            }
+
+            function watchLater(index) {
+                const item = config.series[index];
+                if (item && item.link) {
+                    const message = encodeURIComponent(
+                        `Assista ao anime *${item.title} - ${item.episode}* depois!\n` +
+                        `Link do episódio: ${item.link}\n` +
+                        `Acesse também: ${config.watchLaterBaseLink}`
+                    );
+                    showNotification('Iremos guardar o episódio do anime! Recomendamos enviá-lo ao seu contato para uso próprio, como uma mensagem para você mesmo.');
+                    setTimeout(() => {
+                        const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+                        window.open(whatsappUrl, '_blank');
+                    }, 4000);
+                } else {
+                    showNotification('Link não disponível para este episódio.');
+                }
+            }
+
+            function showShareOptions(index) {
+                state.currentShareIndex = index;
+                elements.shareOptions.classList.add('active');
+                elements.episodesMenuOverlay.classList.add('active');
+            }
+
+            function handleShare(platform, index) {
+                const item = config.series[index || state.currentShareIndex];
+                const message = encodeURIComponent(
+                    `Confira *${item.title} - ${item.episode}* no Solo Leveling - Primeira Temporada!\n` +
+                    `Acesse: ${config.shareLink}`
+                );
+                let url;
+                if (platform === 'whatsapp') {
+                    url = `https://api.whatsapp.com/send?text=${message}`;
+                } else if (platform === 'facebook') {
+                    url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(config.shareLink)}`;
+                }
+                elements.shareOptions.classList.remove('active');
+                elements.episodesMenuOverlay.classList.remove('active');
+                window.open(url, '_blank');
+                showNotification(`Compartilhando via ${platform.charAt(0).toUpperCase() + platform.slice(1)}!`);
+            }
+
+            function reportError(index) {
+                const item = config.series[index];
+                const message = encodeURIComponent(`Reporte um erro para o episódio ${item.episode} de ${item.title}`);
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=5535984072446&text=${message}`;
+                window.open(whatsappUrl, '_blank');
+                showNotification('Redirecionando para reportar erro no WhatsApp!');
+            }
+
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 4000);
+            }
+
+            function openEpisodesMenu() {
+                state.isEpisodesMenuOpen = true;
+                elements.episodesMenu.classList.add('open');
+                elements.episodesMenuOverlay.classList.add('active');
+                scrollToLastWatchedEpisode();
+            }
+
+            function scrollToLastWatchedEpisode() {
+                if (state.lastWatchedEpisode !== null) {
+                    const lastWatchedItem = elements.episodesMenuList.querySelector(`.episodes-menu__item[data-index="${state.lastWatchedEpisode}"]`);
+                    if (lastWatchedItem) {
+                        lastWatchedItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else {
+                    elements.episodesMenu.scrollTop = state.menuScrollPosition;
+                }
+            }
+
+            function closeEpisodesMenu() {
+                state.isEpisodesMenuOpen = false;
+                elements.episodesMenu.classList.remove('open');
+                elements.episodesMenuOverlay.classList.remove('active');
+                elements.shareOptions.classList.remove('active');
+            }
+
+            function selectEpisode(index) {
+                goToSlide(index);
+                closeEpisodesMenu();
+            }
+
+            function toggleTheme() {
+                const currentTheme = body.dataset.theme;
+                body.dataset.theme = currentTheme === 'light' ? 'dark' : 'light';
+                themeToggle.innerHTML = `<i class="fas ${body.dataset.theme === 'light' ? 'fa-sun' : 'fa-moon'}"></i> Tema`;
+            }
+
+            function filterEpisodes() {
+                const searchTerm = searchEpisodes.value.toLowerCase();
+                const episodes = elements.episodesMenuList.querySelectorAll('.episodes-menu__item');
+
+                episodes.forEach(episode => {
+                    const text = episode.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        episode.style.display = 'block';
+                    } else {
+                        episode.style.display = 'none';
+                    }
+                });
+            }
+
+            function saveCommentHandler() {
+                const comment = commentText.value;
+                if (comment.trim() !== '') {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment';
+                    commentDiv.textContent = comment;
+                    commentsList.appendChild(commentDiv);
+                    commentText.value = '';
+                    saveCommentToLocalStorage(comment);
+                }
+            }
+
+            function shareCommentHandler() {
+                const comment = commentText.value;
+                if (comment.trim() !== '') {
+                    const whatsappUrl = `https://chat.whatsapp.com/HF1Rbe2ObccJ8kWs3RrUZ9`;
+                    window.open(whatsappUrl, '_blank');
+                }
+            }
+
+            function saveCommentToLocalStorage(comment) {
+                const comments = JSON.parse(localStorage.getItem('comments')) || [];
+                comments.push(comment);
+                localStorage.setItem('comments', JSON.stringify(comments));
+            }
+
+            function loadCommentsFromLocalStorage() {
+                const comments = JSON.parse(localStorage.getItem('comments')) || [];
+                comments.forEach(comment => {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment';
+                    commentDiv.textContent = comment;
+                    commentsList.appendChild(commentDiv);
+                });
+            }
+
+            
+
+            function preloadNextSlides() {
+                const nextSlideIndex = (state.currentSlide + 1) % config.series.length;
+                const nextNextSlideIndex = (state.currentSlide + 2) % config.series.length;
+
+                const nextSlide = new Image();
+                nextSlide.src = config.series[nextSlideIndex].image;
+
+                const nextNextSlide = new Image();
+                nextNextSlide.src = config.series[nextNextSlideIndex].image;
+            }
+
+            initialize();
+            preloadNextSlides();
+        });
+    </script>
+    <script>
+    let lastScrollTop = 0;
+    const frame = document.getElementById('imageFrame');
+
+    window.addEventListener('scroll', function() {
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+            frame.style.top = '-250px'; // Oculta ao rolar pra baixo
+        } else {
+            frame.style.top = '0'; // Mostra ao rolar pra cima
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    }, false);
+</script>
+</body>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Carousel - Recomendações</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6f61 0%, #ff8a65 100%);
+            --text-primary-color: #ffffff;
+            --text-secondary-accent: #cccccc;
+            --background-color: #1c2526;
+            --secondary-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-accent: rgba(0, 0, 0, 0.5);
+            --highlight-accent: #ff3d00;
+            --highlight-hover-accent: #ff5722;
+            --spacing-small: 10px;
+            --spacing-medium: 18px;
+            --spacing-section: 35px;
+            --font-size-extra-small: clamp(9px, 13vw, 13px);
+            --font-size-small: 14px;
+            --font-size-medium: clamp(15px, 2.3vw, 17px);
+            --font-size-large: clamp(18px, 2.8vw, 22px);
+        }
+
+        [data-theme="light"] {
+            --text-primary-color: #212121;
+            --text-secondary-accent: #757575;
+            --background-color: #f5f5f5;
+            --secondary-color: rgba(0, 0, 0, 0.08);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --shadow-primary: rgba(0, 0, 0, 0.15);
+            --shadow-accent: rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Jura', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-primary-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .anime-info-carousel-container {
+            max-width: 100%;
+            width: 100%;
+            margin: var(--spacing-section) 0;
+            padding: 10px;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            position: relative;
+            text-align: left;
+        }
+
+        [data-theme="light"] .anime-info-carousel-container {
+            background: #ffffff;
+        }
+
+        .anime-highlight-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            color: var(--text-primary-color);
+            letter-spacing: 0.3px;
+            padding: 7px;
+            transition: color 0.3s ease;
+        }
+
+        .anime-info-slides-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .anime-info-slide {
+            display: none;
+            width: 100%;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .anime-info-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .anime-slide-content {
+            padding: 7px 0;
+            color: var(--text-primary-color);
+            text-align: left;
+        }
+
+        .anime-title {
+            font-size: var(--font-size-small);
+            font-weight: 700;
+            margin-bottom: 3px;
+            text-transform: lowercase;
+        }
+
+        .anime-episode {
+            font-size: var(--font-size-extra-small);
+            font-weight: 600;
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .anime-duration {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-secondary-accent);
+            margin-bottom: 3px;
+        }
+
+        .anime-synopsis {
+            font-size: var(--font-size-extra-small);
+            color: var(--text-primary-color);
+            line-height: 1.4;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 7px;
+        }
+
+        .anime-actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .anime-action-button {
+            padding: 4px 9px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: var(--font-size-extra-small);
+            background: var(--highlight-accent);
+            color: #fff;
+            border-radius: 3px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        .anime-action-button:hover {
+            background: var(--highlight-hover-accent);
+            transform: scale(1.03);
+        }
+
+        .anime-action-button.next-ep {
+            background: #ff9100;
+        }
+
+        .anime-action-button.next-ep:hover {
+            background: #ff8000;
+        }
+
+        .anime-action-button.share {
+            background: #00c853;
+        }
+
+        .anime-action-button.share:hover {
+            background: #00b248;
+        }
+
+        .anime-slideshow-container {
+            max-width: 100%;
+            width: 100%;
+            margin: var(--spacing-section) 0;
+            position: relative;
+            overflow: hidden;
+            padding: 15px 0;
+            background: #2a2e2e;
+            box-shadow: 0 5px 25px var(--shadow-primary);
+            z-index: 10;
+        }
+
+        [data-theme="light"] .anime-slideshow-container {
+            background: #ffffff;
+        }
+
+        .anime-carousel-title {
+            font-size: var(--font-size-large);
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary-color);
+            text-align: center;
+            letter-spacing: 0.3px;
+            padding: 7px;
+            padding-bottom: 10px;
+            transition: background-color 0.7s ease, color 0.7s ease;
+        }
+
+        .anime-slides-wrapper {
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            position: relative;
+            padding: 0;
+            touch-action: pan-x;
+            perspective: 900px;
+            margin-top: 10px;
+        }
+
+        .slide {
+            position: absolute;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out, width 0.5s ease-in-out, height 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            width: calc(100% / 3);
+            height: 142.5px;
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: grab;
+            overflow: hidden;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            will-change: transform, opacity, width, height, box-shadow;
+            z-index: 5;
+        }
+
+        .slide.active {
+            transform: translateX(0) scale(1.2) rotateY(0deg);
+            z-index: 20;
+            opacity: 1;
+            pointer-events: all;
+            width: 100%;
+            height: 213.75px;
+            box-shadow: 0 5px 18px var(--shadow-accent);
+            animation: pulse-shadow 0.5s ease-in-out;
+        }
+
+        .slide.prev {
+            transform: translateX(-100%) scale(0.95) rotateY(-8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            width: calc(100% / 3);
+        }
+
+        .slide.next {
+            transform: translateX(100%) scale(0.95) rotateY(8deg);
+            z-index: 10;
+            opacity: 0.5;
+            box-shadow: 0 2px 10px var(--shadow-primary);
+            width: calc(100% / 3);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+            loading: lazy;
+            z-index: 6;
+        }
+
+        @keyframes pulse-shadow {
+            0%, 100% { box-shadow: 0 5px 18px var(--shadow-accent); }
+            50% { box-shadow: 0 8px 25px var(--shadow-accent); }
+        }
+
+        .swipe-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-primary-color);
+            font-size: var(--font-size-extra-small);
+            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        [data-theme="light"] .swipe-indicator {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-primary-color);
+        }
+
+        .swipe-left {
+            left: 8px;
+        }
+
+        .swipe-right {
+            right: 8px;
+        }
+
+        .anime-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px 25px;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--text-primary-color);
+            box-shadow: 0 3px 10px var(--shadow-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+            font-size: var(--font-size-medium);
+            font-weight: 500;
+            text-align: center;
+            border-radius: 7px;
+            max-width: 85%;
+            width: 350px;
+        }
+
+        [data-theme="light"] .anime-notification {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary-color);
+        }
+
+        .anime-notification.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-section: 20px;
+            }
+
+            body {
+                padding-top: 20px;
+            }
+
+            .anime-carousel-title, .anime-highlight-title {
+                font-size: var(--font-size-medium);
+            }
+
+            .anime-slides-wrapper {
+                height: 270px;
+                gap: 20px;
+                padding: 0;
+            }
+
+            .slide {
+                width: calc(100% / 3);
+                height: 120px;
+            }
+
+            .slide.active {
+                width: 100%;
+                height: 180px;
+            }
+
+            .slide.prev {
+                transform: translateX(-100%) scale(0.95) rotateY(-6deg);
+                width: calc(100% / 3);
+            }
+
+            .slide.next {
+                transform: translateX(100%) scale(0.95) rotateY(6deg);
+                width: calc(100% / 3);
+            }
+
+            .anime-title {
+                font-size: var(--font-size-extra-small);
+            }
+
+            .anime-episode, .anime-duration, .anime-synopsis {
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+            }
+
+            .anime-action-button {
+                padding: 3.5px 7.5px;
+                font-size: calc(var(--font-size-extra-small) * 0.9);
+                min-width: 55px;
+            }
+
+            .anime-notification {
+                font-size: var(--font-size-small);
+                padding: 10px 15px;
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .anime-slides-wrapper {
+                height: 230px;
+            }
+
+            .slide {
+                width: calc(100% / 3);
+                height: 105px;
+            }
+
+            .slide.active {
+                width: 100%;
+                height: 157.5px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="anime-info-carousel-container" id="animeInfoCarousel">
+        <h2 class="anime-highlight-title">Recomendações</h2>
+    </div>
+    <div class="anime-slideshow-container" id="animeSlideshowContainer" aria-live="polite">
+        <div class="carousel-section">
+            <div class="anime-carousel-title" id="animeCarouselTitle"></div>
+            <div class="anime-slides-wrapper" id="animeSlidesWrapper">
+                <div class="swipe-indicator swipe-left">← Deslizar</div>
+                <div class="swipe-indicator swipe-right">Deslizar →</div>
+            </div>
+        </div>
+    </div>
+    <div class="anime-info-carousel-container" id="animeInfoDetailsCarousel">
+        <div class="anime-info-slides-wrapper" id="animeInfoSlidesWrapper"></div>
+    </div>
+    <div class="anime-notification" id="animeNotification"></div>
+        <div class="footer">
+        <p>© 2025 Solo Leveling Dublado- Primeira Temporada. Todos os direitos reservados. Desenvolvido por xAI.</p>
+        <p>Entre em contato:
+            <a href="https://api.whatsapp.com/send?phone=5535984072446" target="_blank" aria-label="Contato via WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
+            <a href="https://www.facebook.com/sololeveling" target="_blank" aria-label="Página do Facebook"><i class="fab fa-facebook"></i> Facebook</a>
+        </p>
+    </div>
+    <script>
+        const animeConfig = {
+            series: [
+                {
+                    title: "Naruto Clássico",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto Uzumaki, um jovem ninja que sonha em se tornar Hokage, enfrenta desafios e busca reconhecimento.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/naruto-classico-ep1"
+                },
+                {
+                    title: "Naruto Shippuden",
+                    episode: "Ep. 1",
+                    duration: "23 minutos",
+                    synopsis: "Naruto retorna à Vila da Folha mais forte e determinado a salvar seu amigo Sasuke e enfrentar a Akatsuki.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/naruto-shippuden-ep1"
+                },
+                {
+                    title: "Dragon Ball Z",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Goku defende a Terra de poderosos inimigos como Freeza, Cell e Majin Boo, enquanto treina para ser o mais forte.",
+                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    link: "https://example.com/dragon-ball-z-ep1"
+                },
+                {
+                    title: "Attack on Titan",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Humanidade luta pela sobrevivência contra titãs gigantes, enquanto segredos obscuros sobre sua origem são revelados.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/attack-on-titan-ep1"
+                },
+                {
+                    title: "One Piece",
+                    episode: "Ep. 1",
+                    duration: "24 minutos",
+                    synopsis: "Luffy e sua tripulação viajam pelos mares em busca do lendário One Piece.",
+                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    link: "https://example.com/one-piece-ep1"
+                }
+            ],
+            swipeThreshold: 80,
+            autoSlideInterval: 10000
+        };
+
+        const animeElements = {
+            slidesWrapper: document.getElementById('animeSlidesWrapper'),
+            infoSlidesWrapper: document.getElementById('animeInfoSlidesWrapper'),
+            carouselTitle: document.getElementById('animeCarouselTitle'),
+            notification: document.getElementById('animeNotification')
+        };
+
+        const animeState = {
+            currentSlide: 0,
+            isDraggingSlides: false,
+            startX: 0,
+            currentX: 0,
+            lastTouchTime: 0,
+            autoSlideTimer: null
+        };
+
+        function animeInitialize() {
+            try {
+                console.log('Initializing anime carousel');
+                if (!animeElements.slidesWrapper || !animeElements.infoSlidesWrapper || !animeElements.carouselTitle) {
+                    throw new Error('Elementos do carrossel não encontrados no DOM.');
+                }
+                animeCreateCarousels();
+                animeSetupEventListeners();
+                animeUpdateSlides();
+                animeStartAutoSlide();
+                console.log('Anime carousel initialized');
+            } catch (error) {
+                console.error('Anime initialization error:', error);
+                animeShowNotification('Erro ao carregar o carrossel.');
+            }
+        }
+
+        function animeCreateCarousels() {
+            try {
+                animeElements.slidesWrapper.innerHTML = `
+                    <div class="swipe-indicator swipe-left">← Deslizar</div>
+                    <div class="swipe-indicator swipe-right">Deslizar →</div>
+                `;
+                animeElements.infoSlidesWrapper.innerHTML = '';
+                const items = animeConfig.series;
+                if (!items || items.length === 0) {
+                    throw new Error('Nenhum item encontrado em animeConfig.series.');
+                }
+                console.log(`Creating ${items.length} anime slides`);
+                items.forEach((item, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.dataset.index = index;
+                    slide.setAttribute('aria-label', `Slide de ${item.title}: ${item.episode}`);
+                    slide.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/360x270?text=Imagem+Indisponível'">
+                    `;
+                    animeElements.slidesWrapper.appendChild(slide);
+
+                    const nextIndex = (index + 1) % items.length;
+                    const nextEpisodeTitle = items[nextIndex].title;
+                    const infoSlide = document.createElement('div');
+                    infoSlide.className = 'anime-info-slide';
+                    infoSlide.dataset.index = index;
+                    infoSlide.innerHTML = `
+                        <div class="anime-slide-content">
+                            <div class="anime-title">${item.title.toLowerCase()}</div>
+                            <div class="anime-episode">${item.episode}</div>
+                            <div class="anime-duration">${item.duration}</div>
+                            <div class="anime-synopsis">${item.synopsis || 'Sinopse indisponível'}</div>
+                            <div class="anime-actions">
+                                <button class="anime-action-button watch-now" aria-label="Assistir ${item.title} ${item.episode} agora" data-index="${index}">▶ Assistir agora</button>
+                                <button class="anime-action-button next-ep" aria-label="Ir para o próximo anime ${nextEpisodeTitle}" data-index="${nextIndex}">Próximo: ${nextEpisodeTitle.substring(0, 5)}…</button>
+                                <button class="anime-action-button share" aria-label="Compartilhar ${item.title} ${item.episode}" data-index="${index}">📤 Compartilhar</button>
+                            </div>
+                        </div>
+                    `;
+                    animeElements.infoSlidesWrapper.appendChild(infoSlide);
+                });
+
+                animeElements.infoSlidesWrapper.querySelectorAll('.watch-now').forEach(button => {
+                    button.onclick = () => {
+                        animeResetAutoSlide();
+                        animeWatchNow(parseInt(button.dataset.index));
+                    };
+                });
+                animeElements.infoSlidesWrapper.querySelectorAll('.next-ep').forEach(button => {
+                    button.onclick = () => {
+                        animeResetAutoSlide();
+                        animeGoToSlide(parseInt(button.dataset.index));
+                    };
+                });
+                animeElements.infoSlidesWrapper.querySelectorAll('.share').forEach(button => {
+                    button.onclick = () => {
+                        animeResetAutoSlide();
+                        animeShowShareOptions(parseInt(button.dataset.index));
+                    };
+                });
+                console.log('Anime slides created successfully');
+            } catch (error) {
+                console.error('Error creating anime carousels:', error);
+                animeShowNotification('Erro ao criar o carrossel.');
+            }
+        }
+
+        function animeSetupEventListeners() {
+            try {
+                animeElements.slidesWrapper.addEventListener('touchstart', animeTouchStartSlides, { passive: true });
+                animeElements.slidesWrapper.addEventListener('touchmove', animeTouchMoveSlides, { passive: false });
+                animeElements.slidesWrapper.addEventListener('touchend', animeTouchEndSlides, { passive: true });
+                animeElements.slidesWrapper.addEventListener('wheel', animeHandleWheel, { passive: false });
+                document.addEventListener('keydown', animeHandleKeyboardNavigation);
+            } catch (error) {
+                console.error('Error setting up anime event listeners:', error);
+            }
+        }
+
+        function animeHandleKeyboardNavigation(e) {
+            if (e.key === 'ArrowLeft') {
+                animeResetAutoSlide();
+                animePrevSlide();
+            } else if (e.key === 'ArrowRight') {
+                animeResetAutoSlide();
+                animeNextSlide();
+            }
+        }
+
+        function animeHandleWheel(e) {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) return;
+            e.preventDefault();
+            animeResetAutoSlide();
+            if (e.deltaX > 0) animeNextSlide();
+            else animePrevSlide();
+        }
+
+        let animeLastTouchMoveSlides = 0;
+        function animeTouchStartSlides(e) {
+            animeState.isDraggingSlides = true;
+            animeState.startX = e.touches[0].clientX;
+            animeState.lastTouchTime = Date.now();
+            animeUpdateSwipeIndicators();
+        }
+
+        function animeTouchMoveSlides(e) {
+            if (!animeState.isDraggingSlides) return;
+            const now = Date.now();
+            if (now - animeLastTouchMoveSlides < 16) return;
+            animeLastTouchMoveSlides = now;
+            animeState.currentX = e.touches[0].clientX;
+            const deltaX = animeState.startX - animeState.currentX;
+            const deltaY = Math.abs(e.touches[0].clientY - e.touches[0].clientY);
+            if (deltaY > Math.abs(deltaX)) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            const slides = animeElements.slidesWrapper.querySelectorAll('.slide');
+            const maxTranslate = 100;
+            const maxRotateY = 8;
+            slides.forEach((slide, i) => {
+                const isActive = i === animeState.currentSlide;
+                const isPrev = i === (animeState.currentSlide - 1 + slides.length) % slides.length;
+                const isNext = i === (animeState.currentSlide + 1) % slides.length;
+                let translateX = 0;
+                let scale = 0.95;
+                let opacity = 0.5;
+                let rotateY = 0;
+                let shadow = '0 2px 10px var(--shadow-primary)';
+                let animation = '';
+
+                if (isPrev) {
+                    translateX = -maxTranslate + (deltaX / 1.5);
+                    rotateY = -maxRotateY + (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isNext) {
+                    translateX = maxTranslate - (deltaX / 1.5);
+                    rotateY = maxRotateY - (deltaX / 15);
+                    opacity = Math.min(1, 0.5 + Math.abs(deltaX / 300));
+                    scale = Math.min(0.95, 0.95 + (Math.abs(deltaX) / 1000));
+                } else if (isActive) {
+                    translateX = deltaX / 5;
+                    opacity = 1;
+                    scale = 1.2;
+                    shadow = '0 5px 18px var(--shadow-accent)';
+                    animation = 'pulse-shadow 0.5s ease-in-out';
+                }
+
+                slide.style.transform = `translateX(${translateX}%) scale(${scale}) rotateY(${rotateY}deg)`;
+                slide.style.opacity = opacity;
+                slide.style.boxShadow = shadow;
+                slide.style.animation = animation;
+            });
+            requestAnimationFrame(animeUpdateSwipeIndicators);
+        }
+
+        function animeTouchEndSlides(e) {
+            if (!animeState.isDraggingSlides) return;
+            const diffX = animeState.startX - animeState.currentX;
+            const timeElapsed = Date.now() - animeState.lastTouchTime;
+            if (Math.abs(diffX) > animeConfig.swipeThreshold && timeElapsed > 100) {
+                animeResetAutoSlide();
+                if (diffX > 0) animeNextSlide();
+                else animePrevSlide();
+            }
+            animeState.isDraggingSlides = false;
+            animeState.startX = 0;
+            animeState.currentX = 0;
+            animeUpdateSlides();
+            animeUpdateSwipeIndicators();
+        }
+
+        function animeUpdateSwipeIndicators() {
+            const indicators = animeElements.slidesWrapper.querySelectorAll('.swipe-indicator');
+            indicators.forEach(indicator => {
+                indicator.style.opacity = animeState.isDraggingSlides ? '1' : '0';
+            });
+        }
+
+        function animeStartAutoSlide() {
+            if (animeState.autoSlideTimer) {
+                clearTimeout(animeState.autoSlideTimer);
+            }
+            animeState.autoSlideTimer = setTimeout(() => {
+                animeNextSlide();
+                animeStartAutoSlide();
+            }, animeConfig.autoSlideInterval);
+        }
+
+        function animeResetAutoSlide() {
+            if (animeState.autoSlideTimer) {
+                clearTimeout(animeState.autoSlideTimer);
+            }
+            animeStartAutoSlide();
+        }
+
+        function animeUpdateSlides() {
+            try {
+                requestAnimationFrame(() => {
+                    const slides = animeElements.slidesWrapper.querySelectorAll('.slide');
+                    const items = animeConfig.series;
+                    if (slides.length === 0 || items.length === 0) {
+                        throw new Error('Slides ou itens não encontrados.');
+                    }
+
+                    animeElements.carouselTitle.textContent = `${items[animeState.currentSlide].title} -- Primeira edição -- ${items[animeState.currentSlide].episode}`;
+                    const targetColor = (animeState.currentSlide % 2 === 0) ? '#1c2526' : '#b0bec5';
+                    animeElements.carouselTitle.style.backgroundColor = targetColor;
+                    animeElements.carouselTitle.style.color = targetColor === '#1c2526' ? '#ffffff' : '#1c2526';
+                    animeElements.carouselTitle.style.fontFamily = "'Jura', sans-serif";
+
+                    slides.forEach((slide, i) => {
+                        slide.classList.remove('active', 'prev', 'next');
+                        if (i === animeState.currentSlide) {
+                            slide.classList.add('active');
+                            slide.style.transform = 'translateX(0%) scale(1.2) rotateY(0deg)';
+                            slide.style.opacity = '1';
+                            slide.style.width = '100%';
+                            slide.style.height = '213.75px';
+                            slide.style.boxShadow = '0 5px 18px var(--shadow-accent)';
+                            slide.style.animation = 'pulse-shadow 0.5s ease-in-out';
+                        } else if (i === (animeState.currentSlide - 1 + slides.length) % slides.length) {
+                            slide.classList.add('prev');
+                            slide.style.transform = 'translateX(-100%) scale(0.95) rotateY(-8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = 'calc(100% / 3)';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else if (i === (animeState.currentSlide + 1) % slides.length) {
+                            slide.classList.add('next');
+                            slide.style.transform = 'translateX(100%) scale(0.95) rotateY(8deg)';
+                            slide.style.opacity = '0.5';
+                            slide.style.width = 'calc(100% / 3)';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        } else {
+                            slide.style.transform = 'translateX(0%) scale(0.95)';
+                            slide.style.opacity = '0';
+                            slide.style.width = 'calc(100% / 3)';
+                            slide.style.height = '142.5px';
+                            slide.style.boxShadow = '0 2px 10px var(--shadow-primary)';
+                            slide.style.animation = '';
+                        }
+                    });
+
+                    animeUpdateInfoSlide(animeState.currentSlide);
+                });
+            } catch (error) {
+                console.error('Error updating anime slides:', error);
+            }
+        }
+
+        function animeUpdateInfoSlide(index) {
+            try {
+                const infoSlides = animeElements.infoSlidesWrapper.querySelectorAll('.anime-info-slide');
+                infoSlides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+            } catch (error) {
+                console.error('Error updating anime info slide:', error);
+            }
+        }
+
+        function animeNextSlide() {
+            animeState.currentSlide = (animeState.currentSlide + 1) % animeConfig.series.length;
+            animeUpdateSlides();
+        }
+
+        function animePrevSlide() {
+            animeState.currentSlide = (animeState.currentSlide - 1 + animeConfig.series.length) % animeConfig.series.length;
+            animeUpdateSlides();
+        }
+
+        function animeGoToSlide(index) {
+            animeState.currentSlide = index;
+            animeUpdateSlides();
+        }
+
+        function animeWatchNow(index) {
+            try {
+                const item = animeConfig.series[index];
+                if (item && item.link) {
+                    animeShowNotification(`Redirecionando para ${item.title} ${item.episode}`);
+                    setTimeout(() => {
+                        window.open(item.link, '_blank');
+                    }, 1500);
+                } else {
+                    animeShowNotification('Link não disponível.');
+                }
+            } catch (error) {
+                console.error('Error in animeWatchNow:', error);
+            }
+        }
+
+        function animeShowShareOptions(index) {
+            try {
+                const item = animeConfig.series[index];
+                const message = encodeURIComponent(`Confira *${item.title} - ${item.episode}*!\nAcesse: ${item.link}`);
+                animeShowNotification('Compartilhando...');
+                setTimeout(() => {
+                    const whatsappUrl = `https://api.whatsapp.com/send?text=${message}`;
+                    window.open(whatsappUrl, '_blank');
+                }, 1500);
+            } catch (error) {
+                console.error('Error in animeShowShareOptions:', error);
+            }
+        }
+
+        function animeShowNotification(message) {
+            try {
+                animeElements.notification.textContent = message;
+                animeElements.notification.classList.add('show');
+                setTimeout(() => {
+                    animeElements.notification.classList.remove('show');
+                }, 3500);
+            } catch (error) {
+                console.error('Error in animeShowNotification:', error);
+            }
+        }
+
+        animeInitialize();
+    </script>
+</body>
+  
