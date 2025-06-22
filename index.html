@@ -488,12 +488,12 @@ Fim do comentário de orientação para o carrossel 1.
         const animeConfig = {
             series: [
                 {
-                    title: "Solo Leveling o segundo despertar",
-                    episode: "Eps. 12",
+                    title: "Naruto Clássico",
+                    episode: "Ep. 1",
                     duration: "23 minutos",
-                    synopsis: "Em um mundo onde portais conectam a Terra a masmorras cheias de monstros, algumas pessoas despertam poderes especiais e se tornam caçadores. Sung Jin-Woo é um desses caçadores, conhecido por ser o mais fraco de todos. Mas um evento inesperado muda seu destino e dá início a uma jornada cheia de ação e mistérios.",
-                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
-                    link: "https://animeigeek.github.io/CineAnimeHome/Animes/SoloLevelingDublado1T.html"
+                    synopsis: "Naruto Uzumaki, um jovem ninja que sonha em se tornar Hokage, enfrenta desafios e busca reconhecimento.",
+                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    link: "https://example.com/naruto-classico-ep1"
                 },
                 {
                     title: "Naruto Shippuden",
@@ -892,6 +892,7 @@ Fim do comentário de orientação para o carrossel 1.
 
         animeInitialize();
     </script>
+    
 </body>
 
 
@@ -3014,7 +3015,7 @@ Fim do comentário de orientação para o carrossel 3.
                     episode: "Ep. 1",
                     duration: "23 minutos",
                     synopsis: "Naruto Uzumaki, um jovem ninja que sonha em se tornar Hokage, enfrenta desafios e busca reconhecimento.",
-                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    image: "https://i.postimg.cc/6pRNFBBw/computador-estetico-naruto-3840-x-2160-f4040rejdiy7j6fz.webp",
                     link: "https://example.com/naruto-classico-ep1"
                 },
                 {
@@ -3022,7 +3023,7 @@ Fim do comentário de orientação para o carrossel 3.
                     episode: "Ep. 1",
                     duration: "23 minutos",
                     synopsis: "Naruto retorna à Vila da Folha mais forte e determinado a salvar seu amigo Sasuke e enfrentar a Akatsuki.",
-                    image: "https://i.postimg.cc/brZJ4d3P/wp8170290.webp",
+                    image: "https://i.postimg.cc/zXJKPf5Z/IMG-20250619-010224.jpg",
                     link: "https://example.com/naruto-shippuden-ep1"
                 },
                 {
@@ -3030,7 +3031,7 @@ Fim do comentário de orientação para o carrossel 3.
                     episode: "Ep. 1",
                     duration: "24 minutos",
                     synopsis: "Goku defende a Terra de poderosos inimigos como Freeza, Cell e Majin Boo, enquanto treina para ser o mais forte.",
-                    image: "https://i.postimg.cc/J751wFTb/1347366.png",
+                    image: "https://i.postimg.cc/c4skMZb6/anime-dragon-ball-z-75wgv18nbd0zop9r.webp",
                     link: "https://example.com/dragon-ball-z-ep1"
                 },
                 {
@@ -3038,7 +3039,7 @@ Fim do comentário de orientação para o carrossel 3.
                     episode: "Ep. 1",
                     duration: "24 minutos",
                     synopsis: "Humanidade luta pela sobrevivência contra titãs gigantes, enquanto segredos obscuros sobre sua origem são revelados.",
-                    image: "https://i.postimg.cc/DfNBgLMv/00-33-46-images.jpg",
+                    image: "https://i.postimg.cc/9Q9xcM48/attackon-titan-colossal-confrontation-r5twfxjjje56spbf.webp",
                     link: "https://example.com/attack-on-titan-ep1"
                 },
                 {
@@ -4630,4 +4631,10 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 </body>
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const currentTheme = document.documentElement.getAttribute("data-theme");
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
+});
 </html>
