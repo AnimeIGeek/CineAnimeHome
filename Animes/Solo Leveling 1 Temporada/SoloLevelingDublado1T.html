@@ -1,4 +1,718 @@
 
+<!-- ==========================================================================================
+CHATGPT MASTER COMMENT - MENU SUPERIOR E MENU HAMBÚRGUER
+
+Descrição geral:
+Este bloco representa o sistema de navegação principal do projeto, composto por dois elementos:
+→ A barra superior fixa (menu superior / top-bar)
+→ O menu lateral retrátil (menu hambúrguer), incluindo também os menus de perfil e assinatura.
+
+Objetivo:
+Fornecer uma navegação acessível, rápida e responsiva para as principais seções do site, com botões
+visuais claros e suporte a tema escuro/claro.
+
+Estrutura geral:
+- top-bar: Barra superior fixa com ícones para navegação, perfil, tema e assinatura.
+- main-menu: Menu lateral (hambúrguer) que desliza da esquerda, contendo os links principais do site.
+- subscription-menu: Menu retrátil da direita com destaque para botão de "Seja Premium".
+- profile-menu: Menu retrátil da direita com opções relacionadas à conta do usuário.
+
+Interações JavaScript:
+- Botões de alternância para abrir/fechar os menus são ativados via `addEventListener`.
+- A troca de tema escuro/claro é feita alterando o atributo `data-theme` do `<body>`.
+
+Dependências:
+- Font Awesome (ícones visuais)
+- CSS customizado incluído diretamente na `<style>` ou externo.
+- Responsivo e funcional em dispositivos móveis.
+
+Instruções importantes para o ChatGPT:
+- Toda vez que eu (o usuário) mencionar “menu superior”, “menu hambúrguer” ou “barra de navegação”,
+você deve entender que estou me referindo exatamente a este bloco.
+- Alterações visuais, como adicionar ou remover ícones, mudar o botão de tema ou personalizar os
+menus laterais, devem ser feitas exclusivamente neste trecho.
+- A estrutura do menu é reutilizável em qualquer página do projeto.
+
+Observação:
+Este sistema de menu é compatível com todos os carrosséis descritos nos outros blocos. 
+Pode ser incluído no `<body>` de qualquer página, respeitando a presença das classes e IDs.
+
+Fim do comentário de orientação para o sistema de menus.
+========================================================================================== -->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Menu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"; rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=PT+Sans&family=Roboto:wght@300;400;500;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet" rel="preload" as="style">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff6f61 0%, #ff8a65 100%));
+            --text-primary-color: #ffffff;
+            --text-secondary-accent: #cccccc;
+            --background-color: #1c2526;
+            --secondary-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-accent: rgba(0, 0, 0, 0.5);
+            --highlight-accent: #ff3d00;
+            --highlight-hover-accent: #ff5722;
+            --spacing-small: 10px;
+            --spacing-medium: 18px;
+            --spacing-section: 35px;
+            --font-size-extra-small: clamp(9px, 13vw, 13px);
+            --font-size-small: 14px;
+            --font-size-medium: clamp(15px, 2.3vw, 17px);
+            --font-size-large: clamp(18px, 2.8vw, 22px);
+            --gold-color: #ffd700;
+        }
+
+        [data-theme="light"] {
+            --text-primary-color: #212121;
+            --text-secondary-accent: #757575;
+            --background-color: #f5f5f5;
+            --secondary-color: rgba(0, 0, 0, 0.08);
+            --border-color: rgba(0, 0, 0, 0.12);
+            --shadow-primary: rgba(0, 0, 0, 0.15);
+            --shadow-accent: rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        html, body {
+            font-family: 'Jura', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            background: var(--background-color);
+            color: var(--text-primary-color);
+            min-height: 100vh;
+            padding-top: 72px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .header-menu {
+            font-family: 'PT Sans', sans-serif;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: #2a2e2e;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1001;
+            box-shadow: 0 10px 50px var(--shadow-primary);
+            border-radius: 0 0 20px 20px;
+        }
+
+        [data-theme="light"] .top-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 10px 50px var(--shadow-primary);
+        }
+
+        .top-bar__section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .top-bar__icon {
+            position: relative;
+            color: var(--text-primary-color);
+            background: none;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .top-bar__icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--secondary-color);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .top-bar__icon:hover::before,
+        .top-bar__icon:focus::before {
+            opacity: 1;
+        }
+
+        .top-bar__icon i {
+            position: relative;
+            font-size: 1.25rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .top-bar__icon:hover {
+            transform: scale(1.1);
+        }
+
+        .menu {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 72px);
+            background: #2a2e2e;
+            border-right: 1px solid var(--border-color);
+            transform: translateX(-100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px var(--shadow-primary);
+            border-radius: 0 20px 20px 0;
+            will-change: transform;
+        }
+
+        [data-theme="light"] .menu {
+            background: #ffffff;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .menu.open {
+            transform: translateX(0);
+            background: #2a2e2e;
+        }
+
+        [data-theme="light"] .menu.open {
+            background: #ffffff;
+        }
+
+        .menu__list {
+            list-style: none;
+            padding: 16px 0;
+        }
+
+        .menu__item {
+            margin: 8px 16px;
+        }
+
+        .menu__link {
+            color: var(--text-primary-color);
+            text-decoration: none;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 4px var(--shadow-primary);
+            background: transparent;
+        }
+
+        .menu__link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--secondary-color);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu__link:hover::before,
+        .menu__link:focus::before {
+            opacity: 1;
+        }
+
+        .menu__link i {
+            margin-right: 12px;
+            font-size: 1.25rem;
+            color: var(--text-secondary-accent);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .submenu {
+            margin-top: 4px;
+            padding-left: 48px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.open {
+            max-height: 300px;
+        }
+
+        .submenu__link {
+            color: var(--text-secondary-accent);
+            padding: 8px 16px;
+            font-size: 0.9375rem;
+            display: block;
+            text-decoration: none;
+        }
+
+        .submenu__text {
+            color: var(--text-secondary-accent);
+            padding: 8px 16px;
+            font-size: 0.9375rem;
+            display: block;
+        }
+
+        .premium-button {
+            background: var(--primary-gradient);
+            color: var(--text-primary-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: calc(100% - 32px);
+            margin: 16px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 4px var(--shadow-primary);
+        }
+
+        .premium-button:hover,
+        .premium-button.active {
+            background: var(--gold-color);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--text-primary-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-primary);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 2000;
+            font-size: var(--font-size-medium);
+            font-weight: 500;
+            text-align: center;
+            max-width: 85%;
+        }
+
+        [data-theme="light"] .notification {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary-color);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-section: 20px;
+            }
+
+            body {
+                padding-top: 72px;
+            }
+
+            .menu {
+                width: min(80vw, 280px);
+            }
+
+            .top-bar {
+                padding: 0 12px;
+            }
+
+            .top-bar__icon {
+                padding: 8px;
+            }
+
+            .top-bar__icon i {
+                font-size: 1.2rem;
+            }
+
+            .menu__link {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .menu__link i {
+                font-size: 1.1rem;
+            }
+
+            .submenu__link {
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+
+            .premium-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .notification {
+                right: 10px;
+                bottom: 10px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="header-menu">
+        <nav aria-label="Navegação principal" class="top-bar" role="navigation">
+            <div class="top-bar__section">
+                <button aria-label="Página Principal" class="top-bar__icon" id="home-icon">
+                    <i class="fas fa-home"></i>
+                </button>
+                <button aria-label="Alternar menu" class="top-bar__icon" id="menu-icon">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button aria-label="Alternar tema claro/escuro" class="top-bar__icon" id="theme-toggle" title="Alternar tema">
+                    <i class="fas fa-adjust"></i>
+                </button>
+            </div>
+            <div class="top-bar__section">
+                <button aria-label="Menu de assinatura" class="top-bar__icon" id="subscription-icon">
+                    <i class="fas fa-crown"></i>
+                </button>
+                <button aria-label="Menu de perfil" class="top-bar__icon" id="profile-icon">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </nav>
+        <nav aria-label="Menu principal" class="menu" id="main-menu">
+            <ul class="menu__list">
+                <!-- GRUPO: EXPLORAR CONTEÚDO -->
+                <li class="menu-group-title">Explorar Conteúdo</li>
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="adicionados-recentemente" aria-expanded="false">
+                        <i class="fas fa-clock"></i>
+                        <span class="bold-text">Adicionados Recentemente</span>
+                    </button>
+                    <div class="submenu" id="adicionados-recentemente-submenu">
+                        <a class="menu__link submenu__link" href="adicionados-recentemente.html">
+                            <i class="fas fa-clock"></i> Ver Animes Recentes
+                        </a>
+                    </div>
+                </li>
+                <li class="menu__item">
+                    <a class="menu__link" href="pagina-principal.html">
+                        <i class="fas fa-home"></i>
+                        <span class="bold-text">Página Principal</span>
+                    </a>
+                </li>
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="todos-animes" aria-expanded="false">
+                        <i class="fas fa-list"></i>
+                        <span class="bold-text">Todos os Animes</span>
+                    </button>
+                    <div class="submenu" id="todos-animes-submenu">
+                        <a class="menu__link submenu__link" href="todos-animes.html">
+                            <i class="fas fa-list"></i> Lista Completa
+                        </a>
+                    </div>
+                </li>
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="mais-assistidos" aria-expanded="false">
+                        <i class="fas fa-eye"></i>
+                        <span class="bold-text">Mais Assistidos</span>
+                    </button>
+                    <div class="submenu" id="mais-assistidos-submenu">
+                        <a class="menu__link submenu__link" href="mais-assistidos.html">
+                            <i class="fas fa-eye"></i> Top Animes
+                        </a>
+                    </div>
+                </li>
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="destaques" aria-expanded="false">
+                        <i class="fas fa-star"></i>
+                        <span class="bold-text">Destaques</span>
+                    </button>
+                    <div class="submenu" id="destaques-submenu">
+                        <a class="menu__link submenu__link" href="destaques.html">
+                            <i class="fas fa-star"></i> Animes em Alta
+                        </a>
+                    </div>
+                </li>
+                <!-- GRUPO: SERVIÇOS -->
+                <li class="menu-group-title">Serviços</li>
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="gerador-bilhetes" aria-expanded="false">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span class="bold-text">Gerador de Bilhetes</span>
+                    </button>
+                    <div class="submenu" id="gerador-bilhetes-submenu">
+                        <a class="menu__link submenu__link" href="bilhetes-leilao.html">
+                            <i class="fas fa-gavel"></i> Gerar Bilhetes para Leilão
+                        </a>
+                        <a class="menu__link submenu__link" href="bilhetes-sorteio.html">
+                            <i class="fas fa-random"></i> Gerar Bilhetes para Sorteio
+                        </a>
+                        <a class="menu__link submenu__link" href="bilhetes-store.html">
+                            <i class="fas fa-store"></i> Gerar Bilhetes para Store
+                        </a>
+                    </div>
+                </li>
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="mercado-servico" aria-expanded="false">
+                        <i class="fas fa-briefcase"></i>
+                        <span class="bold-text">Mercado de Serviço</span>
+                    </button>
+                    <div class="submenu" id="mercado-servico-submenu">
+                        <a class="menu__link submenu__link" href="mercado-servico.html">
+                            <i class="fas fa-briefcase"></i> Ver Serviços
+                        </a>
+                    </div>
+                </li>
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="loja" aria-expanded="false">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="bold-text">Loja</span>
+                    </button>
+                    <div class="submenu" id="loja-submenu">
+                        <a class="menu__link submenu__link" href="loja.html">
+                            <i class="fas fa-shopping-cart"></i> Ir para Loja
+                        </a>
+                    </div>
+                </li>
+                <!-- GRUPO: CONTATO E INFORMAÇÃO -->
+                <li class="menu-group-title">Contato e Informação</li>
+                <li class="menu__item">
+                    <a class="menu__link" href="contato.html">
+                        <i class="fas fa-envelope"></i>
+                        <span class="bold-text">Contato</span>
+                    </a>
+                </li>
+                <li class="menu__item">
+                    <a class="menu__link" href="sobre.html">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="bold-text">Sobre</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <nav aria-label="Menu de assinatura" class="menu subscription-menu" id="subscription-menu">
+            <div class="menu__content">
+                <button class="premium-button" id="premium-button">
+                    <i class="fas fa-star" style="margin-right: 8px;"></i>Seja Premium
+                </button>
+            </div>
+        </nav>
+        <nav aria-label="Menu de perfil" class="menu profile-menu" id="profile-menu">
+            <ul class="menu__list">
+                <li class="menu__item">
+                    <button class="menu__link" data-submenu="profile" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="bold-text">Minha Conta</span>
+                        <i class="fas fa-chevron-down" style="margin-left: auto;"></i>
+                    </button>
+                    <div class="submenu" id="profile-submenu">
+                        <a class="menu__link submenu__link" href="#" id="show-auth" role="button">
+                            <i class="fas fa-user-edit"></i>Perfil
+                        </a>
+                        <a class="menu__link submenu__link" href="#" role="button">
+                            <i class="fas fa-cog"></i>Configurações
+                        </a>
+                        <a class="menu__link submenu__link" href="https://chat.whatsapp.com/HF1Rbe2ObccJ8kWs3RrUZ9" target="_blank" role="button">
+                            <i class="fas fa-sign-out-alt"></i>Sair
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="notification" id="notification"></div>
+    <script>
+        const elements = {
+            notification: document.getElementById('notification'),
+            menuToggles: {
+                'menu-icon': 'main-menu',
+                'subscription-icon': 'subscription-menu',
+                'profile-icon': 'profile-menu'
+            },
+            premiumButton: document.getElementById('premium-button'),
+            subscriptionIcon: document.getElementById('subscription-icon'),
+            themeToggle: document.getElementById('theme-toggle'),
+            homeIcon: document.getElementById('home-icon')
+        };
+
+        function initialize() {
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') document.body.dataset.theme = 'light';
+                updateThemeIcon();
+                setupEventListeners();
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showNotification('Erro ao carregar o menu.');
+            }
+        }
+
+        function setupEventListeners() {
+            try {
+                elements.themeToggle.addEventListener('click', toggleTheme);
+
+                Object.entries(elements.menuToggles).forEach(([toggleId, menuId]) => {
+                    const toggle = document.getElementById(toggleId);
+                    const menu = document.getElementById(menuId);
+                    if (!toggle || !menu) {
+                        console.error(`Elemento ${toggleId} ou ${menuId} não encontrado`);
+                        return;
+                    }
+                    toggle.addEventListener('click', e => {
+                        e.stopPropagation();
+                        Object.values(elements.menuToggles).forEach(id => {
+                            const currentMenu = document.getElementById(id);
+                            if (currentMenu && currentMenu !== menu) currentMenu.classList.remove('open');
+                        });
+                        menu.classList.toggle('open');
+                        toggle.classList.toggle('active');
+                        if (toggleId === 'subscription-icon' && !menu.classList.contains('open')) {
+                            elements.premiumButton.classList.remove('active');
+                            elements.subscriptionIcon.style.color = '';
+                        }
+                    });
+                });
+
+                document.querySelectorAll('[data-submenu]').forEach(button => {
+                    if (!button) return;
+                    button.addEventListener('click', e => {
+                        e.preventDefault();
+                        const submenuId = `${button.dataset.submenu}-submenu`;
+                        const submenu = document.getElementById(submenuId);
+                        const icon = button.querySelector('.fa-chevron-down');
+                        if (submenu) {
+                            submenu.classList.toggle('open');
+                            button.setAttribute('aria-expanded', submenu.classList.contains('open') ? 'true' : 'false');
+                            if (icon) icon.style.transform = submenu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0)';
+                        } else console.error(`Submenu ${submenuId} não encontrado`);
+                    });
+                });
+
+                document.addEventListener('click', e => {
+                    if (!e.target.closest('.menu') && !e.target.closest('.top-bar__icon')) {
+                        Object.values(elements.menuToggles).forEach(menuId => {
+                            const menu = document.getElementById(menuId);
+                            if (menu) menu.classList.remove('open');
+                        });
+                        document.querySelectorAll('.top-bar__icon').forEach(icon => {
+                            if (icon) icon.classList.remove('active');
+                        });
+                        elements.premiumButton.classList.remove('active');
+                        elements.subscriptionIcon.style.color = '';
+                    }
+                });
+
+                document.addEventListener('keydown', e => {
+                    if (e.key === 'Escape') {
+                        Object.values(elements.menuToggles).forEach(menuId => {
+                            const menu = document.getElementById(menuId);
+                            if (menu) menu.classList.remove('open');
+                        });
+                        document.querySelectorAll('.top-bar__icon').forEach(icon => {
+                            if (icon) icon.classList.remove('active');
+                        });
+                        elements.premiumButton.classList.remove('active');
+                        elements.subscriptionIcon.style.color = '';
+                    }
+                });
+
+                elements.premiumButton.addEventListener('click', () => {
+                    elements.premiumButton.classList.add('active');
+                    elements.subscriptionIcon.style.color = 'var(--gold-color)';
+                    showNotification('Assinatura premium em breve!');
+                });
+
+                document.querySelectorAll('.submenu__link:not([href]):not([data-series]):not([data-movie])').forEach(link => {
+                    link.addEventListener('click', e => {
+                        e.preventDefault();
+                        showNotification('Este conteúdo ainda não foi adicionado.');
+                    });
+                });
+            } catch (error) {
+                console.error('Error setting up event listeners:', error);
+            }
+        }
+
+        function toggleTheme() {
+            try {
+                const currentTheme = document.body.dataset.theme;
+                document.body.dataset.theme = currentTheme === 'light' ? 'dark' : 'light';
+                localStorage.setItem('theme', document.body.dataset.theme);
+                updateThemeIcon();
+            } catch (error) {
+                console.error('Error in toggleTheme:', error);
+            }
+        }
+
+        function updateThemeIcon() {
+            const icon = elements.themeToggle.querySelector('i');
+            if (document.body.dataset.theme === 'light') {
+                icon.classList.remove('fa-adjust');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-adjust');
+            }
+        }
+
+        function showNotification(message) {
+            try {
+                elements.notification.textContent = message;
+                elements.notification.classList.add('show');
+                setTimeout(() => {
+                    elements.notification.classList.remove('show');
+                }, 3500);
+            } catch (error) {
+                console.error('Error in showNotification:', error);
+            }
+        }
+
+        initialize();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1048,11 +1762,7 @@
   const savedTheme = localStorage.getItem("theme") || "dark";
   document.documentElement.setAttribute("data-theme", savedTheme);
 </script>
-<header class="header">
-    <button class="header__theme-toggle" aria-label="Alternar tema">
-        <i class="fas fa-sun"></i> Tema
-    </button>
-</header>
+
     </div>
     <div class="anime-info-carousel-container" id="animeInfoCarousel">
         <h2 class="anime-highlight-title">Assista Solo Leving 1 Temporada</h2>
